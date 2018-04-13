@@ -100,7 +100,7 @@ For each detected repeat, the following files will be created.
 - **periodic\_repeat.pdf** visualizes the contents in repeat.gbk, k-mer.tsv,
 - **ppm4vis.tsv** and pdist.tsv as represented in Fig. 1a
 - **weblogo.pdf** represents sequence logo for the detected motif
-- **weblogo.txt **is a raw data used produce weblogo.pdf
+- **weblogo.txt** is a raw data used produce weblogo.pdf
 
 Software usage
 -------------------------------
