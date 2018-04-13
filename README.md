@@ -42,7 +42,7 @@ directory.
 
 ```cd SPADE```
 
-chmod u+x \*.py
+```chmod u+x \*.py```
 
 2\. Install the necessary Python packages using the following commands.
 
@@ -110,13 +110,15 @@ to the information in the original query file. In the same folder, a
 descendant folder is created to store all the results for each detected
 periodic repeat. The directory structure therefore looks as follows.
 
+````
 (current directory)/
-
-​    +----\[entry\].gbk
-
-​    +----\[entry\]/
-
-​            +----\[type\]\_\[start\]\_\[end\]/
+	
+	+----\[entry\].gbk
+	
+	+----\[entry\]/
+		
+		+----\[type\]\_\[start\]\_\[end\]/
+````
 
 where \[type\] is nucl or prot indicating that if the repeat sequence
 type is nucleotide or protein, respectively, and \[start\] and \[end\]
