@@ -24,7 +24,7 @@ To execute SPADE using linux/unix commands, add the SPADE directory to \$PATH an
 
 ```chmod u+x \*.py```
 
-2\. Install the necessary Python packages using the following commands.
+2\. Install the necessary Python packages using the following commands. 
 
 ```pip install seaborn```
 
@@ -32,19 +32,24 @@ To execute SPADE using linux/unix commands, add the SPADE directory to \$PATH an
 
 ```pip install biopython```
 
+If pip is not installed, please download [get-pip.py](https://bootstrap.pypa.io/get-pip.py). Then, pip will be avaiable by the following commands. After that, please retry the above commands.
+
+```pyhton get-pip.py```
+
+
 3\. Install MAFFT if it is not installed. MAFFT package is available at the following links.
 
-- OSX or macOS
-- Red hat based distributions
-- Debian based distributions
+- [OSX or macOS](https://mafft.cbrc.jp/alignment/software/macosx.html)
+- [Linux based distributions](https://mafft.cbrc.jp/alignment/software/linux.html)
 
 Set \$PATH to the MAFFT executable.
 
 4\. Install BLAST+ if it is not installed. Executable BLAST+ package is available at the following links.
 
-- OSX or macOS
-- Linux based distributions
-- Set \$PATH to the BLAST+ executable.
+- [OSX or macOS](ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.7.1+-x64-macosx.tar.gz)
+- [Linux based distributions](ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.7.1+-x64-linux.tar.gz)
+
+Set \$PATH to the BLAST+ executable.
 
 Example code
 -------------------------------
