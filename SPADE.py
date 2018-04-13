@@ -201,7 +201,7 @@ class LOCUS(object):
                         hra = HRA(i+j, "prot", self.pk_size, self.pw_size, self.pg_size, self.ptk, self.ptp, self.ptb, self.ptm, self.ptq, self.ptr)
                         hra.hra_range          = phra_range_list[j]  
                         hra.region_score_array = region_score_array[hra.hra_range[2]:hra.hra_range[3]]
-                        hra.feature            = copy.deepcopy(feat) 
+                        hra.feature            = feat
                         hra.strand             = feat.strand 
                         hra.region_seq         = str(feat.qualifiers["translation"][0][hra.hra_range[2]:hra.hra_range[3]]).upper()
                         if feat.location.start == 1 and feat.location.end == hra.seq_len:
@@ -213,10 +213,11 @@ class LOCUS(object):
                             hra.p_end       = feat.location.end.position
                         
                         hra.output_dir  = "_".join([hra.dtype,str(hra.p_start),str(hra.p_end),str(hra.hra_range[0]),str(hra.hra_range[1])])
-                        feat.location   = FeatureLocation(0,len(feat.qualifiers["translation"][0]))
-                        hra.features    = [hra.feature]
+                        afeat           = copy.deepcopy(feat) 
+                        afeat.location  = FeatureLocation(0,len(feat.qualifiers["translation"][0]))
+                        hra.features    = [afeat]
                         hra.record      = SeqRecord(Seq(str(feat.qualifiers["translation"][0]), Alphabet.ProteinAlphabet())) 
-                        hra.record.features.append(hra.feature) 
+                        hra.record.features.append(afeat) 
                         hra.w_size      = hra.hra_range[1] - hra.hra_range[0]  
                         if hra.output_dir not in output_dir_list:
                             output_dir_list.append(hra.output_dir) 

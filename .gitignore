@@ -3,9 +3,6 @@
 !/example/*.gbff
 !/example/NC_008532.1/
 /example/NC_008532.1/*
-<<<<<<< HEAD
 !/example/NC_008532.1/nucl_649122_650215/
+!/example/NC_008532.1/NC_008532.1_SPADE.gb.png
 
-=======
-!/example/NC_008532.1/DNA_649122_650215/
->>>>>>> master
