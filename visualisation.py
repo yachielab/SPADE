@@ -490,7 +490,7 @@ def load_data(dtype, strand, ksize ,thresh, Format="pdf"):
             pass 
 
     if dtype == "nucl":
-        make_figure(peak_matrix_list, kmer_count_signal, rpt_unit_array_list, gap_rpt_unit_array_list, aln_rpt_unit_array_list, unit_length_list, avg_intensity_list, periods, candidate, peak_period_list=peak_list, gb=gbk, fig_name="peirodic_repeat", thresh=thresh, dtype=dtype ,Format=Format, k=ksize, strand=strand)
+        make_figure(peak_matrix_list, kmer_count_signal, rpt_unit_array_list, gap_rpt_unit_array_list, aln_rpt_unit_array_list, unit_length_list, avg_intensity_list, periods, candidate, peak_period_list=peak_list, gb=gbk, fig_name="periodic_repeat", thresh=thresh, dtype=dtype ,Format=Format, k=ksize, strand=strand)
     elif dtype == "prot":
         make_figure(peak_matrix_list, kmer_count_signal, rpt_unit_array_list, gap_rpt_unit_array_list, aln_rpt_unit_array_list, unit_length_list, avg_intensity_list, periods, candidate, peak_period_list=peak_list, gb=gbk, fig_name="periodic_repeat", thresh=thresh, dtype=dtype ,Format=Format, p_start=p_start, p_end=p_end, k=ksize, strand=strand)
     return peak_list
