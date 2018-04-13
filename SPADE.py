@@ -3,6 +3,7 @@
 import os
 import csv
 import sys
+import copy 
 import time
 import pickle
 import argparse
@@ -21,6 +22,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, FeatureLocation, CompoundLocation
 from kmer_count import *
 from weblogolib import *
+
 
 def savetxt(file_name,data,delimiter="\t",fmt=":.0f",header=""):
     if len(data.shape) == 1:
@@ -70,20 +72,17 @@ class SPADE(object):
         
         ps = [] 
         finished = 0 
-<<<<<<< HEAD
+        
         #Single process mode
         for record in record_parse:
-=======
-        for record in record_parse:
             if self.g_parse != None and self.f_parse != None:
-                record2 = self.f_parse.next() 
-	        if len(set(str(record2.seq))) == 1:
-	            seq = record2.seq
-	            seq.Alphabet = Alphabet.DNAAlphabet()
-	            record.seq = seq
+                record2 = self.f_parse.next()
+                if len(set(str(record2.seq))) == 1:
+                    seq = record2.seq
+                    seq.Alphabet = Alphabet.DNAAlphabet()
+                    record.seq = seq
         
             #Single process mode
->>>>>>> master
             if num_threads < 2:
                 if os.path.exists("./" + record.id) == False:
                     os.mkdir(record.id) 
@@ -135,7 +134,8 @@ class SPADE(object):
 
 
 class LOCUS(object):
-    def __init__(self, seq, record, k_size, w_size, g_size, tk, tp, tb, pk_size, pw_size, pg_size, ptk, ptp, ptb, visualisation, format_type):
+    #Nm, Nr,  Nq
+    def __init__(self, seq, record, k_size, w_size, g_size, tk, tp, tb, tm, tr, tq, pk_size, pw_size, pg_size, ptk, ptp, ptb, ptm, ptr, ptq, visualisation, delete, format_type):
         self.HRA_list      = []
         self.Id            = record.id 
         self.seq           = seq
@@ -144,6 +144,9 @@ class LOCUS(object):
         self.k_size        = k_size
         self.w_size        = w_size 
         self.g_size        = g_size
+        self.tm            = tm
+        self.tr            = tr 
+        self.tq            = tq
         self.tk            = tk
         self.tp            = tp
         self.tb            = tb
@@ -153,11 +156,15 @@ class LOCUS(object):
         self.ptk           = ptk
         self.ptp           = ptp
         self.ptb           = ptb
+        self.ptm           = ptm
+        self.ptq           = ptq
+        self.ptr           = ptr
         self.format_type   = format_type
         self.process       = "None"
         self.seqtype       = "nucl"
-        self.visualisation = visualisation 
-        
+        self.visualisation = visualisation
+        self.delete        = delete
+
         head_seq         = str(self.seq)[0:10000]
         ratio = (head_seq.count("A") + head_seq.count("T") + head_seq.count("G") + head_seq.count("C") + head_seq.count("N")) * 1.0 / len(head_seq)
         if ratio > 0.9 or self.seqtype == "nucl":
@@ -170,28 +177,31 @@ class LOCUS(object):
             self.tk      = self.ptk
             self.tp      = self.ptp
             self.tb      = self.ptb
+            self.tm      = self.ptm
+            self.tq      = self.ptq
+            self.tr      = self.ptr
         #print self.seqtype
     
     def cumulative_kmer_count(self): 
-        self.score_array, self.hra_range_list = kmer_count(self.seq, self.k_size, self.w_size, thresh=self.tk, gap=self.g_size, buf=self.w_size, seqtype = self.seqtype)
+        self.score_array, self.hra_range_list = kmer_count(self.seq, self.k_size, self.w_size, thresh=self.tk, gap=self.g_size, buf=self.tm, seqtype=self.seqtype)
         savetxt(self.Id + "_kmer_count.txt", self.score_array, delimiter="\t", fmt=":.0f") 
-        print("save k-mer count data") 
+        #print("") 
     
     def find_protein_HRA(self): 
         i = 0
         output_dir_list = []
         for feat in self.record.features:
             if feat.type == "CDS" and "translation" in feat.qualifiers.keys():
-                hra = HRA(i, "prot", self.pk_size, self.pw_size, self.pg_size, self.ptk, self.ptp, self.ptb)
+                hra = HRA(i, "prot", self.pk_size, self.pw_size, self.pg_size, self.ptk, self.ptp, self.ptb, self.ptm, self.ptq, self.ptr)
                 region_score_array, phra_range_list = kmer_count(feat.qualifiers["translation"][0], self.pk_size, self.pw_size, thresh=self.ptk, gap=self.pg_size, buf=self.pw_size,seqtype="prot")
                 if len(phra_range_list) < 1:
                     pass 
                 else:
                     for j in range(len(phra_range_list)):
-                        hra = HRA(i+j, "prot", self.pk_size, self.pw_size, self.pg_size, self.ptk, self.ptp, self.ptb)
+                        hra = HRA(i+j, "prot", self.pk_size, self.pw_size, self.pg_size, self.ptk, self.ptp, self.ptb, self.ptm, self.ptq, self.ptr)
                         hra.hra_range          = phra_range_list[j]  
                         hra.region_score_array = region_score_array[hra.hra_range[2]:hra.hra_range[3]]
-                        hra.feature            = feat
+                        hra.feature            = copy.deepcopy(feat) 
                         hra.strand             = feat.strand 
                         hra.region_seq         = str(feat.qualifiers["translation"][0][hra.hra_range[2]:hra.hra_range[3]]).upper()
                         if feat.location.start == 1 and feat.location.end == hra.seq_len:
@@ -203,8 +213,11 @@ class LOCUS(object):
                             hra.p_end       = feat.location.end.position
                         
                         hra.output_dir  = "_".join([hra.dtype,str(hra.p_start),str(hra.p_end),str(hra.hra_range[0]),str(hra.hra_range[1])])
-                        hra.record, hra.features = hra.extract(self.record,hra.p_start,hra.p_end)
-                        hra.w_size   = hra.hra_range[1] - hra.hra_range[0]  
+                        feat.location   = FeatureLocation(0,len(feat.qualifiers["translation"][0]))
+                        hra.features    = [hra.feature]
+                        hra.record      = SeqRecord(Seq(str(feat.qualifiers["translation"][0]), Alphabet.ProteinAlphabet())) 
+                        hra.record.features.append(hra.feature) 
+                        hra.w_size      = hra.hra_range[1] - hra.hra_range[0]  
                         if hra.output_dir not in output_dir_list:
                             output_dir_list.append(hra.output_dir) 
                             self.HRA_list.append(hra)
@@ -217,9 +230,9 @@ class LOCUS(object):
         HRA.seq_len = len(self.seq) 
         for i, hra_range in enumerate(self.hra_range_list):
             if self.seqtype == "nucl":
-                hra = HRA(i, "nucl", self.k_size, self.w_size, self.g_size, self.tk, self.tp, self.tb)
+                hra = HRA(i, "nucl", self.k_size, self.w_size, self.g_size, self.tk, self.tp, self.tb, self.tm, self.tq, self.tr)
             else:
-                hra = HRA(i, "prot", self.pk_size, self.pw_size, self.pg_size, self.ptk, self.ptp, self.ptb)
+                hra = HRA(i, "prot", self.pk_size, self.pw_size, self.pg_size, self.ptk, self.ptp, self.ptb, self.ptm, self.ptq, self.ptr)
             hra.record, hra.features  = hra.extract(self.record,hra_range[2],hra_range[3])  
             hra.region_seq = str(hra.record.seq).upper() 
             hra.region_score_array = self.score_array[hra_range[2]:hra_range[3]]
@@ -298,12 +311,10 @@ class LOCUS(object):
     def decide_query_all(self):
         for hra in self.HRA_list:
             path = os.getcwd()
-            if 1:
-            #try:
+            try:
                 os.chdir(hra.output_dir) 
                 hra.decide_query() 
-            else:
-            #except Exception as e:
+            except Exception as e:
                 print("Error in decide_query_all. dir", self.Id, hra.output_dir)  
                 print(e)
             os.chdir(path)
@@ -328,8 +339,7 @@ class LOCUS(object):
         rm_dir_list  = [] 
         for hra in self.HRA_list:
             path = os.getcwd()
-            if 1:
-            #try:
+            try:
                 os.chdir(hra.output_dir) 
                 hra.make_se_sets()
                 hra.make_motif_array() 
@@ -338,8 +348,7 @@ class LOCUS(object):
                     new_hra_list.append(hra)
                 else:
                     rm_dir_list.append(os.getcwd())
-            else:
-            #except Exception as e:
+            except Exception as e:
                 print("Error in make_se_sets_all. dir", self.Id, hra.output_dir)  
                 print(e) 
             os.chdir(path) 
@@ -363,7 +372,6 @@ class LOCUS(object):
                 for key in keys:
                     if key != "thresh" and key != "peak_period_set" and key != "dtype" and key != "output_dir" and key != "k_size" and key != "strand":
                         del hra.__dict__[key]
-
             else:
             #except Exception as e:
                 print("Error in make_feature_all. dir", self.Id, hra.output_dir) 
@@ -386,9 +394,10 @@ class LOCUS(object):
                 self.record.features.sort(key=lambda x: x.location.start)
                 SeqIO.write(self.record, record_handle, "genbank")
             record_handle.close()
-        
-        for apath in rm_dir_list:
-            shutil.rmtree(apath)
+        if self.delete == 1: 
+            for apath in rm_dir_list:
+                print(apath) 
+                shutil.rmtree(apath)
 
         del self.record.features
         del self.record
@@ -404,9 +413,8 @@ class LOCUS(object):
                 hra.make_figure()
                 hra.make_motif_logo()
             except Exception as e:
-                pass 
-                #print "Error in visualisation_all. dir", self.Id, hra.output_dir 
-                #print e
+                print("Error in visualisation_all. dir", self.Id, hra.output_dir) 
+                print(e)
             os.chdir(path)
 
     def all(self):
@@ -432,7 +440,7 @@ class HRA(object):
     record      = None
     seq_len     = None
     window_size = 1000
-    def __init__(self, Id, dtype, ksize, wsize, gsize, tk, tp, tb): 
+    def __init__(self, Id, dtype, ksize, wsize, gsize, tk, tp, tb, tm, tq, tr): 
         self.Id                 = Id
         self.output_dir         = ""
         self.hra_range          = []
@@ -450,6 +458,9 @@ class HRA(object):
         self.tk           = tk
         self.tp           = tp
         self.tb           = tb
+        self.tm           = tm 
+        self.tq           = tq 
+        self.tr           = tr
         self.p_start      = 0
         self.p_end        = 0
         self.mattf_com    = ""
@@ -468,7 +479,7 @@ class HRA(object):
         
         #Position-Periodicity matrix integration with x axis  
         self.sumx_matrix      = np.sum(self.period_matrix[:,self.hra_range[0]-self.hra_range[2]:self.hra_range[1]-self.hra_range[2]], axis=1) / (self.hra_range[1]-self.hra_range[0]) 
-        
+
         #Peak period detection
         maxIds = signal.argrelmax(self.sumx_matrix)[0].tolist()
         maxIds.append(np.argmax(self.sumx_matrix))
@@ -712,12 +723,12 @@ class HRA(object):
                 for char in char_set:
                     count_list.append(char_list.count(char))    
                 
-                if  weight_list[j] >= 0.5:
+                if  weight_list[j] >= self.tq:
                     freq = max(count_list) * 1.0 / sum(count_list)
                     frequent_seq += char_set[count_list.index(max(count_list))]
                     bit_weight_list.append(bitscore_list[j] * weight_list[j])
                 j += 1 
-            query_candidates = find_candidates(bit_weight_list ,thresh=1.0, gap=5, buf=0, min_score=self.tb)
+            query_candidates = find_candidates(bit_weight_list ,thresh=1.0, gap=self.tr, buf=0, min_score=self.tb)
 
             #If high score regions are separated by both sides. concat them.
             if query_candidates[0][2] == 0 and query_candidates[-1][3] == len(frequent_seq) and len(query_candidates) > 1: 
@@ -834,7 +845,7 @@ class HRA(object):
                         ms = int(blast[n][11])-1-(int(blast[n][9])-1) + s
                         me = int(blast[n][12])+(len(self.query_list[i]) - int(blast[n][10])) - e
                         se_sets.append([ms, me])  
-                        aligned_positions.append([(int(blast[n][9])-1)-s,me - ms - (len(self.query_list[i]) - int(blast[n][10])) + e]) 
+                        aligned_positions.append([(int(blast[n][9])-1)-s,me - ms - (len(self.query_list[i]) - int(blast[n][10])) + e])
                         fasta.write(">motif_"+ str(ms) + "\n")
                         new_motif       = true_motifs[n][s:len(consensus_motif)-e]  
                         consensus_motif = consensus_motifs[n][s:len(consensus_motif)-e]  
@@ -935,7 +946,7 @@ class HRA(object):
                     new_se_sets.append(se_sets[-1]) 
                 else:
                     pass 
-                se_sets = new_se_sets 
+                se_sets = new_se_sets
 
             k = 0
             if len(se_sets) > 2:
@@ -999,7 +1010,9 @@ class HRA(object):
             #Present version of SPADE don't care abount the position of blast hits.
             #If repeating motifs are separated by space whose length is times longer than periodd, the repeat would be evaluated as 
             #two different repeats at next version of spade.
-        
+            if se_sets[0][0] < 0: 
+                se_sets[0][0] = 0 
+            
             if self.dtype == "nucl" or self.feature == None:
                 #For genome
                 part_list_all = [] 
@@ -1021,7 +1034,7 @@ class HRA(object):
                     if self.feature.strand == 1: 
                         part_list_all.append([self.feature.location.start + 3  * (self.hra_range[2] + se_set[0]), self.feature.location.start + 3 * (self.hra_range[2] + se_set[1])])
 
-                    if self.feature.strand == -1: 
+                    else: 
                         part_list_all.append([self.feature.location.end - 3 * (self.hra_range[2] + se_set[1]), self.feature.location.end - 3 * (self.hra_range[2] + se_set[0])]) 
 
                 if self.feature.strand == -1:
@@ -1031,14 +1044,12 @@ class HRA(object):
                 part_list = [] 
                 for se_set in se_sets: 
                     part_list.append([se_set[0], se_set[1]])
-            
+
             locations = []  
             for part in part_list_all:
                 locations.append(FeatureLocation(part[0], part[-1]))  
-            
             location = CompoundLocation(locations) 
             new_feat = SeqFeature(location , type="repeat_region", qualifiers={"dir_name":["",],"note":["",],"hrr_range":["",],"sequence_type":["",],"period":[], "rpt_type":[], "rpt_num":[], "periodicity_score":[], "rpt_unit_seq":[],"unmasked_rpt_unit_seq":[]})                
-            
             new_feat.qualifiers["dir_name"][0]      = self.output_dir
             new_feat.qualifiers["note"][0]          = "Auto annotated by SPADE"
             new_feat.qualifiers["hrr_range"][0]     = ",".join(list(map(str,self.hra_range)))
@@ -1056,47 +1067,48 @@ class HRA(object):
             location = CompoundLocation(locations) 
             new_feat_part            = SeqFeature(location , type="repeat_region")
             new_feat_part.qualifiers = new_feat.qualifiers 
-            #for feat in feat_list:
-            #    if feat.type == "repeat_region" and "rpt_family" in feat.qualifiers.keys():
-            #        new_feat.qualifiers["note"].append("repeat_region:" + feat.qualifiers["rpt_family"][0])
-            #    else:
-            #        new_feat.qualifiers["note"].append(feat.type)
-
             self.record.features.append(new_feat_part)
             new_feat_list.append(new_feat)
-
-        for feat in self.record.features[:-1*(i+1)]:
-            s,e = feature.location.start, feature.locaiton.end
-            feat.location = FeatureLocation(s-self.hra_range[2],e-self.hra_range[2]) 
+        
+        if self.dtype == "nucl":
+            for num in range(0,len(self.record.features[:-1*(i+1)])):
+                s, e = self.record.features[num].location.start, self.record.features[num].location.end 
+                strand = self.record.features[num].strand 
+                start, end = s-self.hra_range[2], e-self.hra_range[2]
+                if start < 0:
+                    start = 0
+                self.record.features[num].location = FeatureLocation(start,end,strand=strand) 
+        
         self.record.features.sort(key=lambda x: x.location.start)
-
         if make_gb == True and len(new_feat_list) > 0: 
-            if self.dtype == "prot":
-                self.record.seq = Seq(self.region_seq,Alphabet.ProteinAlphabet())
             record_handle  = open("repeat.gbk","w")
             self.record.id = self.record.id[0:16]
             SeqIO.write(self.record, record_handle, "genbank")  
-
+        os.system("rm blast.txt subject.fasta query.fasta")
         return new_feat_list
 
     def extract(self, gb, start_pos, end_pos,  make_file=False):
-        feat_list = []
         partial_gb = SeqRecord(Seq(str(gb.seq[start_pos:end_pos]),Alphabet.DNAAlphabet())) 
         partial_gb.id = gb.id
         partial_gb.description = gb.description
+        feat_list = [] 
         for afeat in gb.features:
+            flag  = 0
             for part in afeat.location.parts:
-                if ((part.end >= start_pos + self.seq_len and part.start <= self.seq_len) or (part.end >= self.seq_len and part.start <= self.seq_len)) and afeat.type != "source":
-                    partial_gb.features.append(afeat)
-                    feat_list.append(afeat)
-                    
-                elif afeat.location.start > end_pos:
-                    break
-
+                start, end = part.start, part.end
+                if (start <= end_pos and end >= start_pos and afeat.type != "source"):
+                    flag = 1
+            
+            if flag == 1:
+                partial_gb.features.append(copy.deepcopy(afeat))
+                feat_list.append(copy.deepcopy(afeat))
+            elif afeat.location.start > end_pos:
+                break
+        
         return partial_gb, feat_list
      
     def make_motif_logo(self):
-        vs.motif_logo(self.dtype,self.peak_period_set) 
+        vs.motif_logo(self.dtype) 
         
     def make_figure(self):
         vs.load_data(self.dtype, self.strand  ,self.k_size, 10) 
@@ -1135,14 +1147,15 @@ if __name__ == "__main__":
     
     p.add_argument("-n", "--num_threads", type=int, default=1, help="Number of CPU threads. If this is set to more than 1, SPADE runs multiple processes for multiple sequence entries in parallel.", metavar="num_threads") 
     p.add_argument("-v", type=str, default="Y", choices=("Y","N"), help="Generate pdf files to visualize results for each detected repeat region")
-    p.add_argument("-d", default=argparse.SUPPRESS, help="This option deletes descendant output folders of highly repetitive regions that are detected not to contain periodic repeats")
+    p.add_argument("-d", type=int, default=0, help="This option deletes descendant output folders of highly repetitive regions that are detected not to contain periodic repeats")
     args = p.parse_args()
     
     spade = SPADE() 
     if args.input != "None":
         spade.load(args.input) 
     
-    spade.run(args.num_threads,[args.Nk, args.Nw, args.Ng, args.Ns, args.Np, args.Nu, args.Pk, args.Pw, args.Pg, args.Ps, args.Pp, args.Pu, args.v])
+    #Nm, Nr,  Nq    
+    spade.run(args.num_threads,[args.Nk, args.Nw, args.Ng, args.Ns, args.Np, args.Nu, args.Nm, args.Nr, args.Nq, args.Pk, args.Pw, args.Pg, args.Ps, args.Pp, args.Pu, args.Pm, args.Pr, args.Pq, args.v, args.d])
     finish = open("finish.txt","w")
     finish.write("fnish")
     finish.close() 

@@ -7,6 +7,29 @@ SOURCE      .
   ORGANISM  .
             .
 FEATURES             Location/Qualifiers
+     gene            1..940
+                     /locus_tag="STER_RS03505"
+                     /old_locus_tag="STER_0712"
+     CDS             1..940
+                     /codon_start=1
+                     /db_xref="GI:500000241"
+                     /inference="EXISTENCE: similar to AA sequence:RefSeq:WP_011225728.1"
+                     /locus_tag="STER_RS03505"
+                     /note="Derived by automated computational analysis using gene prediction method: Protein Homology."
+                     /old_locus_tag="STER_0712"
+                     /product="hypothetical protein"
+                     /protein_id="WP_011680959.1"
+                     /transl_table=11
+                     /translation="MKFFVRHPYKDRIELNIGAITQIVGQNNELKYYILQILSWYFGGKKYSREDLSIFDYEEPTILDEAREIVKRSSYHYIDISTFKDLLEQMEYKKGTLAHGYLRKIVNQVDIVGHLEKINEQVELIEEAMNRHINLNCGQVEYHLENLPLTLDQLLTKNFSPFFTI
+                     ENKNLSFEWVSNIDKLSLFLEMLDHLLLQTTEKYLIVLKNIDGFISEESYTIFYRQICHLVKKYPNLTFILFPSDQGYLKIDEENSRFVNILSDQVEHLYDVEFMYERVMKYYPSNDFPTREGFRMSLETVTPYLLTKMLRQPSLSLVDSVILNILNQLFHFSYRIRYLQKSDEKLLQK
+                     FLESKD"
+     repeat_region   1003..2095
+                     /inference="COORDINATES: alignment:crt:1.2"
+                     /inference="COORDINATES: alignment:pilercr:v1.02"
+                     /rpt_family="CRISPR"
+                     /rpt_type=direct
+                     /rpt_unit_range=649125..649160
+                     /rpt_unit_seq="gtttttgtactctcaagatttaagtaactgtacaac"
      repeat_region   join(1003..1038,1068..1103,1134..1169,1200..1235,1266..1301,1332..1367,1398..1433,1464..1499,1531..1566,1597..1632,1663..1698,1730..1765,1796..1831,1862..1897,1928..1963,
                      1994..2029,2060..2095)
                      /dir_name="nucl_649122_650215"
@@ -19,6 +42,36 @@ FEATURES             Location/Qualifiers
                      /rpt_unit_seq="GTTTTTGTACTCTCAAGATTTAAGTAACTGTACAAC"
                      /sequence_type="nucl"
                      /unmasked_rpt_unit_seq="GTTTTTGTACTCTCAAGATTTAAGTAACTGTACAAC"
+     gene            complement(2137..2952)
+                     /locus_tag="STER_RS03510"
+                     /old_locus_tag="STER_0713"
+     CDS             complement(2137..2952)
+                     /codon_start=1
+                     /db_xref="GI:500000242"
+                     /inference="EXISTENCE: similar to AA sequence:RefSeq:WP_002952695.1"
+                     /locus_tag="STER_RS03510"
+                     /note="Derived by automated computational analysis using gene prediction method: Protein Homology."
+                     /old_locus_tag="STER_0713"
+                     /product="phosphate ABC transporter substrate-binding protein"
+                     /protein_id="WP_011680960.1"
+                     /transl_table=11
+                     /translation="MLRFLILSGYFELVMYLQVSGKLNQYINIHYSYLAYISMALSFILALVQLIVWMKKIKVHSHLSGRVAKGASIVLLAFPVLTGLLVPTVTLDANTVSAKGYHFPLAAGSDPNQADQEGTTIQYLKPDTSSYFTSSAYEKEMTKELAKYKGRETIQITTENYMEVM
+                     ELIYLYPNDFVGKKVTYTGFVYNDPQTEGYQFIFRFGIIHCIADSGVYGLATTGSDQTFKDNTWVTVTGTITVNYYQNLKQSLPILNLTEVKEVSQPDNPYVYRVF"
+     gene            complement(2952..3854)
+                     /locus_tag="STER_RS03515"
+                     /old_locus_tag="STER_0714"
+     CDS             complement(2952..3854)
+                     /codon_start=1
+                     /db_xref="GI:500000243"
+                     /inference="EXISTENCE: similar to AA sequence:RefSeq:WP_014608141.1"
+                     /locus_tag="STER_RS03515"
+                     /note="Derived by automated computational analysis using gene prediction method: Protein Homology."
+                     /old_locus_tag="STER_0714"
+                     /product="hypothetical protein"
+                     /protein_id="WP_011680961.1"
+                     /transl_table=11
+                     /translation="MAIFHQLPDSVFQLLAVFLSIIIEALPFVLLGSIVSGFIEVFLTPEKVQNFLPKNKVLAILFGTLIGFIFPSCECGIVPIITRFLEKKVPSYTAIPFMATAPIINPVVLFATYTAFGNSWYYVFLRFLGAFLIAMILGILLGFVVDDQILKENRKVSHVHDYSGL
+                     SAGKKVFQALIHAVDEFFDTGRYLIFGSLVAASMQTYLPTRILTTIGHNSVTAILIMMLLAFILSLCSEADAFIGASLLSSFGVAPTVAFLIIGPMVDIKNLIMMKHQFKTRFVGLFVGTASLVTVIYCLVLGVI"
 ORIGIN
         1 gagctggtat tttggtggaa aaaaatactc gagagaggac ttaagtattt ttgattatga
        61 ggagcctacc atacttgatg aggccagaga aatagtgaaa cgaagtagct atcactatat

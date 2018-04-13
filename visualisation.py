@@ -94,7 +94,7 @@ def make_figure(peak_matrix_list, kmer_count_signal, repeat_unit_array, gap_repe
     if type(gb) != "None":
         GV = gv.GenbView(gb,fig)
         if dtype == "nucl":
-            box_num = GV.make_parameter_list(start,end)
+            box_num = GV.make_parameter_list(0,len(kmer_count_signal))
             ax_gv = plt.axes([0.2,0.72-0.0175*(box_num-1),0.55,0.0175*box_num])
             GV.view_feature(ax_gv)
         elif dtype == "prot":
@@ -310,7 +310,7 @@ def motif_logo(dtype):
         fout.write(pdf_formatter(data, format))
         fout.close()	
         fout = open("weblogo.txt","wb")
-        fout.write(txt_formatter(data, format))    
+        fout.write(txt_formatter(data, format).decode("utf-8"))    
         fout.close()
 
     else:
@@ -366,7 +366,7 @@ def load_data(dtype, strand, ksize ,thresh, Format="pdf"):
             if "SPADE" in feature.qualifiers["note"][0]:
                 peak_list.append(int(feature.qualifiers["period"][0]))
                 candidate   = list(map(int,feature.qualifiers["hrr_range"][0].split(",")))
-                if dtype == "protein":
+                if dtype == "prot":
                     p_start = feature.location.start
                     p_end   = feature.location.end
 
