@@ -46,8 +46,8 @@ Set \$PATH to the MAFFT executable.
 
 4\. Install BLAST+ if it is not installed. Executable BLAST+ package is available at the following links.
 
-- [OSX or macOS](ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.7.1+-x64-macosx.tar.gz)
-- [Linux based distributions](ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.7.1+-x64-linux.tar.gz)
+- [Blast+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download)
+
 
 Set \$PATH to the BLAST+ executable.
 
