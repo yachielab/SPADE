@@ -1,5 +1,4 @@
 #SPADE Installation and User Manual
-
 SPADE is a software to explore various periodic repeat regions comprehensively from large genomic and protein data resources. The software first automatically extracts multiple sequence entries from an input file (GenBank or FASTA format) and identifies sequence type (DNA or protein) for each entry. Each sequence entry is scanned by a sliding window to count *k*-mers and highly repetitive regions are extracted. The sequence periodicity of each highly repetitive region is then evaluated based on position-period matrix that cumulatively plots distance between neighboring same *k*-mers and their sequence positions. The periodic sequence region is defined and the periodic sequence units are queried for a multiple alignment to identify repetitive motif and its sequence logo. The representative motif sequence is aligned back to the sequence of the periodically repeating region to annotate the repeating units. Finally, the annotations for detected periodic repeats are added to the input information and output in GenBank format with an option of visualizing *k*-mer density, position-periodicity matrix, sequence motif logo and repetitive unit loci with neighboring genes for each periodic repeat (Fig. 1a).
 
 
@@ -7,11 +6,9 @@ SPADE is a software to explore various periodic repeat regions comprehensively f
 **Figure 1. Example visualizations of periodic repeat regions captured by SPADE. (a) A CRISPR-surrounding region of Streptococcus thermophilus LMD-9. (b) A circular genome map visualization of S. thermophilus LMD-9 genome with all of the periodic biomolecular sequences detected by SPADE.**
 
 ##Software Dependencies
-
 SPADE works under Python 2.7.13 or Python 3.6.1 later and require BLAST+ (ver 2.6.0 later) and MAFFT (ver 7.221 later) to be installed.
 
 ##Installation
-
 1\. Obtain SPADE github packages using the following single command.
 
 ```git clone https://github.com/ponnhide/SPADE```
