@@ -1,18 +1,15 @@
-#SPADE Installation and User Manual
-
-
+SPADE Installation and User Manual
+===================================
 SPADE is a software to explore various periodic repeat regions comprehensively from large genomic and protein data resources. The software first automatically extracts multiple sequence entries from an input file (GenBank or FASTA format) and identifies sequence type (DNA or protein) for each entry. Each sequence entry is scanned by a sliding window to count *k*-mers and highly repetitive regions are extracted. The sequence periodicity of each highly repetitive region is then evaluated based on position-period matrix that cumulatively plots distance between neighboring same *k*-mers and their sequence positions. The periodic sequence region is defined and the periodic sequence units are queried for a multiple alignment to identify repetitive motif and its sequence logo. The representative motif sequence is aligned back to the sequence of the periodically repeating region to annotate the repeating units. Finally, the annotations for detected periodic repeats are added to the input information and output in GenBank format with an option of visualizing *k*-mer density, position-periodicity matrix, sequence motif logo and repetitive unit loci with neighboring genes for each periodic repeat (Fig. 1a).
 
 **Figure 1. Example visualizations of periodic repeat regions captured by SPADE. (a) A CRISPR-surrounding region of Streptococcus thermophilus LMD-9. (b) A circular genome map visualization of S. thermophilus LMD-9 genome with all of the periodic biomolecular sequences detected by SPADE.**
 
-##Software Dependencies
-
-
+Software Dependencies
+-------------------------------
 SPADE works under Python 2.7.13 or Python 3.6.1 later and require BLAST+ (ver 2.6.0 later) and MAFFT (ver 7.221 later) to be installed.
 
-##Installation
-
-
+Installation
+-------------------------------
 1\. Obtain SPADE github packages using the following single command.
 
 ```git clone https://github.com/ponnhide/SPADE```
@@ -45,8 +42,8 @@ Set \$PATH to the MAFFT executable.
 - Linux based distributions
 - Set \$PATH to the BLAST+ executable.
 
-##Example code
-
+Example code
+-------------------------------
 The package contains a GenBank file for the *Streptococcus thermophilus*
 LMD-9 genome so users can quickly test the functions of SPADE with the
 following operations.
@@ -65,8 +62,8 @@ As this GenBank file contains three sequence entries, SPADE creates three folder
 
 ```get_spade_annotation.py NC_008532.1_SPADE.gb```
 
-##Output data format
-
+Output data format
+-------------------------------
 **Structures of output directories**
 
 If your input a sequence file contains multiple sequence entries, SPADE creates multiple folders for different entries under your current directory. For GenBank files, each LOCUS entry is treated as one sequence entry and each folder can contain results for multiple DNA and protein sequences. In each \[entry\] folder, SPADE creates \[entry\].gbk that involves annotations for the detected periodic repeats in addition to the information in the original query file. In the same folder, a descendant folder is created to store all the results for each detected periodic repeat. The directory structure therefore looks as follows.
@@ -96,8 +93,8 @@ For each detected repeat, the following files will be created.
 - **weblogo.pdf** represents sequence logo for the detected motif
 - **weblogo.txt **is a raw data used produce weblogo.pdf
 
-##Software usage
-
+Software usage
+-------------------------------
 **SYNOPSIS**
 
 ````
