@@ -357,8 +357,9 @@ class LOCUS(object):
         self.HRA_list = new_hra_list
 
     def make_feature_all(self, make_file=True):
-        spade_list   = [] 
-        rm_dir_list  = [] 
+        spade_list    = [] 
+        rm_dir_list   = [] 
+        start_end_set = []
         for hra in self.HRA_list:
             path = os.getcwd()
             if 1:
@@ -366,7 +367,12 @@ class LOCUS(object):
                 os.chdir(hra.output_dir) 
                 feats = hra.make_feature()
                 if len(feats) > 0:
-                    spade_list.extend(feats) 
+                    for feat in feats:
+                        if [feat.location.start, feat.location.end, feat.qualifiers["periodicity_score"][0]] not in start_end_set:
+                            spade_list.append(feat)
+                            start_end_set.append([feat.location.start, feat.location.end, feat.qualifiers["periodicity_score"][0]])  
+                        else:
+                            pass 
                 else:
                     rm_dir_list.append(os.getcwd())
                 keys = list(hra.__dict__.keys())
@@ -764,7 +770,7 @@ class HRA(object):
                 if len(blast) > 2:
                     #If ovelap region between blast hits was detected, the hit represent less E-value compared to others were selected. 
                     fasta = open(fasta_name,"w")
-                    blast = [elements for elements in blast if float(elements[-2]) <= 0.01 or float(elements[6])/float(elements[5]) >= 0.5]
+                    blast = [elements for elements in blast if float(elements[-2]) <= 0.1 or float(elements[6])/float(elements[5]) >= 0.5]
                     consensus_motifs = []
                     true_motifs = [] 
                     pre_end = 0 
@@ -773,7 +779,7 @@ class HRA(object):
                     for elements in blast:
                         consensus_motif = ""
                         true_motif      = ""
-                            
+     
                         if int(elements[9])-1 > 0:
                             for j in range(int(elements[9])-1): 
                                 consensus_motif += "-"
@@ -797,25 +803,26 @@ class HRA(object):
                                 else:
                                     true_motif      += subject_seq[int(elements[12])-1+j]
                                                        
-                        if consensus_motif.count("_") != len(consensus_motif): 
-                            if int(elements[11]) >= pre_end:  
-                                consensus_motifs.append(consensus_motif)     
-                                true_motifs.append(true_motif) 
-                                pre_end    = int(elements[12])
-                                pre_evalue = float(elements[-2]) 
-                                new_blast.append(elements) 
-                                
-                            else:
-                                if float(elements[-2]) < pre_evalue: 
-                                    consensus_motifs[-1] = consensus_motif 
-                                    true_motifs[-1] = true_motif
-                                    pre_end = int(elements[12])
-                                    pre_evalue = float(elements[-2]) 
-                                    new_blast[-1] = elements
-                                else:
-                                    pass 
-                        
-                    blast = new_blast
+                        if int(elements[11]) >= pre_end: 
+                            consensus_motifs.append(consensus_motif)     
+                            true_motifs.append(true_motif) 
+                            pre_end    = int(elements[12])
+                            pre_evalue = float(elements[-2]) 
+                            new_blast.append(elements) 
+                            
+                        #else:
+                        #    if float(elements[-2]) < pre_evalue: 
+                        #        consensus_motifs[-1] = consensus_motif 
+                        #        true_motifs[-1] = true_motif
+                        #        pre_end = int(elements[12])
+                        #        pre_evalue = float(elements[-2]) 
+                        #        new_blast[-1] = elements
+                        #    else:
+                        #        pass 
+                    
+   
+                    #blast = new_blast
+
                     #The following code search the start position of repeat motif.
                     for s, char_list in enumerate(list(zip(*consensus_motifs))):
                         count_list = []  
@@ -837,7 +844,7 @@ class HRA(object):
                     #Threshold of Interspace or Periodic
                     if abs(period - (len(consensus_motif) - s - e)) <= 5:
                         s, e = 0, 0 
- 
+                    
                     #Cutting motif region from query sequence for blast
                     se_sets           = []
                     aligned_positions = [] 
@@ -862,8 +869,7 @@ class HRA(object):
                         
                         fasta.write(new_motif + "\n")
                         true_motifs[n] = new_motif
-                    se_sets.sort()
-
+                    
                     #Save repeat motif and search the varible position in the repeat motif.
                     true_query = ""
                     variable_query = "" 
@@ -1061,7 +1067,7 @@ class HRA(object):
             new_feat.qualifiers["periodicity_score"].append(str(self.periodicity_list[i]))
             new_feat.qualifiers["rpt_unit_seq"].append(str(self.variable_query_list[i]))
             new_feat.qualifiers["unmasked_rpt_unit_seq"].append(str(self.query_list[i]))
-            
+
             locations = []  
             for part in part_list:
                 locations.append(FeatureLocation(part[0], part[-1])) 

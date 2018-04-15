@@ -18,11 +18,11 @@ def get_spade_annotations(dir_name = ""):
                         if "SPADE" in feature.qualifiers["note"][0]:
                             start, end   = feature.location.start, feature.location.end
                             period       = feature.qualifiers["period"][0]
-                            data_type    = feature.qualifiers["data_type"][0] 
-                            repeat_motif = feature.qualifiers["rpt_unit_seq"][0].replace(" ","_").upper()  
+                            data_type    = feature.qualifiers["sequence_type"][0] 
+                            repeat_motif = feature.qualifiers["unmasked_rpt_unit_seq"][0].replace(" ","_").upper()  
                             rptnum       = feature.qualifiers["rpt_num"][0]  
-                            variable_repeat_motif = feature.qualifiers["variable_unit_seq"][0].replace(" ","_").upper()  
-                            periodicity = feature.qualifiers["periodicity"][0]  
+                            variable_repeat_motif = feature.qualifiers["rpt_unit_seq"][0].replace(" ","_").upper()  
+                            periodicity = feature.qualifiers["periodicity_score"][0]  
 
                             periodic_repeats.append([gbk_id,str(start),str(end),period,periodicity,rptnum,data_type,repeat_motif,variable_repeat_motif,"N/A"])
                 if feature.type == "CDS":
@@ -44,7 +44,7 @@ def remove_overlap(periodic_repeats):
     for line in periodic_repeats: 
         start, end  = int(line[1]), int(line[2]) 
         seq_type    = line[-4] 
-        if seq_type == "protein":
+        if seq_type == "prot":
             protein_s_e_list.append([start, end]) 
             new_periodic_repeats.append(line) 
         else:
@@ -75,13 +75,11 @@ def crispr_search(features, s, e):
     return overlap
 
 if __name__ == "__main__":
-    output = open("{}_annotations.tsv".format(".".join(sys.argv[1].split(".")[:-1])),"w")
+    output = open("SPADE_annotations.tsv","w")
     output.write("\t".join(["NCBI RefSeqID","Start","End","Period","Periodicity","#Repeat unit","Sequence type","Repetitive motif","Repetitive motif masked variable positions","Overlapped CDS annotations"]) + "\n")
     for record in SeqIO.parse(sys.argv[1],"genbank"):
-        os.chdir(record.id)
         periodic_repeats = get_spade_annotations()
         periodic_repeats = remove_overlap(periodic_repeats) 
         for row in periodic_repeats:
             output.write("\t".join(map(str,row)) + "\n")
-        os.chdir("../")
     output.close()
