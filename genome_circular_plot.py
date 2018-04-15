@@ -78,4 +78,4 @@ if __name__ == "__main__":
         chuncos.plot_feature(feat_type="CDS", bottom=720, height=70, requirement=lambda x: x.strand==-1, color="#0494FF")
         chuncos.plot_feature(feat_type="CDS", bottom=800, height=70, requirement=lambda x: x.strand== 1, color="#FF7D76")
     
-    chuncos.save(format_type="png",file_name=sys.argv[1].replace(".gp","_map")) 
+    chuncos.save(format_type="png",file_name=sys.argv[1].replace(".gb","_map")) 
