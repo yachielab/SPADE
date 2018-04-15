@@ -1,8 +1,8 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import os
 import sys 
 from Bio import SeqIO
-from tqdm import tqdm
 
 def get_spade_annotations(dir_name = ""):
     dirs = os.listdir(".")
