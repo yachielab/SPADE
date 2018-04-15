@@ -611,7 +611,7 @@ class HRA(object):
         savetxt(f, np.concatenate((np.array([list(range(p_min,p_max+1))]).T, self.period_matrix[p_min:p_max+1,:].astype(np.int)), axis=1), delimiter="\t", fmt=":.0f", header=header)
         #####
         #        Position
-        #Pediods    1       2       3       4       5       6   
+        #Pediod     1       2       3       4       5       6   
         #1          score   score   score   score   score   score
         #2          score   score   score   score   score   score
         #3          score   score   score   score   socre   score
@@ -640,13 +640,13 @@ class HRA(object):
         #####
         
         f = "kmer.tsv"
-        header = "Position\tPeriods\n"
+        header = "Position\tScore\n"
         data   = [] 
         for n, score in enumerate(self.region_score_array):
             data.append([n+1,score]) 
         savetxt(f, np.array(data), delimiter="\t", fmt=":.0f", header=header) 
         #####
-        #Position Pediods   
+        #Position Score   
         #1        score  
         #2        score  
         #3        score  
