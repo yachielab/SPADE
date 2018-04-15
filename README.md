@@ -103,18 +103,20 @@ For each detected repeat, the following files will be created.
 
 Software usage
 -------------------------------
-**SYNOPSIS**
-
-````
+````help
+SYNOPSIS
   SPADE [-h] [--help] [-in input_file] [-f input_file_format] [-t sequence_type] 
     [-Nk kmer_size] [-Nw window_size] [-Ns kmer_score_threshold] [-Ng gap_size] 
-    [-Nm region_margin] [-Np period_threshold] [-Nu motif_letter_consistency]
+    [-Nm region_margin] [-Np period_threshold] [-Nq gap_frequency_threshold] 
+    [-Nu motif_letter_consistency] [-Nr non_consensus_length_threshold]
     [-Pk kmer_size] [-Pw window_size] [-Ps kmer_score_threshold] [-Pg gap_size] 
-    [-Pm region_margin] [-Pp period_threshold] [-Pu motif_letter_consistency]
-    [--mafft string] [--blast string] [-n num_threads] [-v string] [-d] [-V] [--version]
+    [-Pm region_margin] [-Pp period_threshold] [-Pq gap_frequency_threshold]
+    [-Pu motif_letter_consistency] [-Pr non_consensus_length_threshold]
+    [--mafft string] [--blast string] [-n num_threads] [-v string] [-d] [--delete] 
+    [-V] [--version]
 
 DESCRIPTION
-   SPADE 1.0
+  SPADE 1.0.0
 
 OPTIONAL ARGUMENTS
  -h, --help
@@ -190,18 +192,18 @@ OPTIONAL ARGUMENTS
    Threshold for length of non-consensus region to be removed from a repeat motif
    Default = 5
 
- *** MAFFT and BLAST+ options
- --mafft <‘String’>
+ *** MAFFT and BLAST+ options (Uniplemented) 
+ --mafft <'String'>
    Optional arguments for MAFFT can be defined with single quotations 
-   Default = ‘--auto’
+   Default = '--auto'
    For MAFFT optional arguments, see 
    https://mafft.cbrc.jp/alignment/software/manual/manual.html
- --blastn <‘String’>
+ --blastn <'String'>
    Optional arguments for BLAST+ can be defined with single quotations
-   Default = ‘-strand plus -task blastn-short –outfmt "6 qseqid qseq sseqid sseq pident qlen length mismatch gapopen qstart qend sstart send gaps evalue bitscore"’
---blastp <‘String’>
+   Default = '-strand plus -task blastn-short –outfmt "6 qseqid qseq sseqid sseq pident qlen length mismatch gapopen qstart qend sstart send gaps evalue bitscore"'
+ --blastp <'String'>
    Optional arguments for BLAST+ can be defined with single quotations
-   Default = ‘-task blastp-short –outfmt "6 qseqid qseq sseqid sseq pident qlen length mismatch gapopen qstart qend sstart send gaps evalue bitscore"’
+   Default = '-task blastp-short –outfmt "6 qseqid qseq sseqid sseq pident qlen length mismatch gapopen qstart qend sstart send gaps evalue bitscore"'
    For BLAST+ optional arguments, see
    https://www.ncbi.nlm.nih.gov/books/NBK279684/
 
@@ -210,10 +212,10 @@ OPTIONAL ARGUMENTS
    Number of CPU threads. If this is set to more than 1, SPADE runs multiple 
    processes for multiple sequence entries in parallel.
    Default = 1
- -v <String, Permissible values: ‘Y’ ‘N’>
+ -v <String, Permissible values: 'Y' 'N'>
    Generate pdf files to visualize results for each detected repeat region
    Default = Y
- -d
+ -d, --delete
    This option deletes descendant output folders of highly repetitive regions
    that are detected not to contain periodic repeats
 ````

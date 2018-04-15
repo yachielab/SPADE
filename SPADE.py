@@ -11,18 +11,6 @@ import math
 import shutil
 import collections
 import subprocess
-import numpy as np 
-import multiprocessing as mp
-import visualisation as vs
-from scipy import signal
-from Bio import Alphabet
-from Bio.Seq import Seq
-from Bio import SeqIO
-from Bio.SeqRecord import SeqRecord
-from Bio.SeqFeature import SeqFeature, FeatureLocation, CompoundLocation
-from kmer_count import *
-from weblogolib import *
-
 
 def savetxt(file_name,data,delimiter="\t",fmt=":.0f",header=""):
     if len(data.shape) == 1:
@@ -1113,8 +1101,8 @@ class HRA(object):
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser(add_help=False)
-    p.add_argument("-V", "--version", action="version", default=argparse.SUPPRESS)
-    p.add_argument('-h', "--help", action='help', default=argparse.SUPPRESS, help='Print USAGE, DESCRIPTION and ARGUMENTS; ignore all other parameters') 
+    p.add_argument("-V", "--version", action="store_true", default=argparse.SUPPRESS)
+    p.add_argument('-h', "--help", action='store_true', default=argparse.SUPPRESS, help='Print USAGE, DESCRIPTION and ARGUMENTS; ignore all other parameters') 
 
     p.add_argument("-in","--input", type=str, default="None", help="Input file name", metavar="input_file")
     p.add_argument("-f", type=str, default="auto", choices=("genbank","fasta","auto"), help="Input file type. Permissible values: ‘genbank’ ‘fasta’ ‘auto’. Default = 'auto'", metavar="input_file_format")
@@ -1142,15 +1130,37 @@ if __name__ == "__main__":
     
     p.add_argument("-n", "--num_threads", type=int, default=1, help="Number of CPU threads. If this is set to more than 1, SPADE runs multiple processes for multiple sequence entries in parallel.", metavar="num_threads") 
     p.add_argument("-v", type=str, default="Y", choices=("Y","N"), help="Generate pdf files to visualize results for each detected repeat region")
-    p.add_argument("-d", type=int, default=0, help="This option deletes descendant output folders of highly repetitive regions that are detected not to contain periodic repeats")
+    p.add_argument("-d", "--delete", action="store_true", help="This option deletes descendant output folders of highly repetitive regions that are detected not to contain periodic repeats")
     args = p.parse_args()
     
+    if args.help:
+        import spade_help as sh
+        print(sh.help_description)
+        exit() 
+
+    if args.version:
+        print("SPADE: 1.0.0") 
+        exit()
+    
+    import numpy as np 
+    import multiprocessing as mp
+    import visualisation as vs
+    from scipy import signal
+    from Bio import Alphabet
+    from Bio.Seq import Seq
+    from Bio import SeqIO
+    from Bio.SeqRecord import SeqRecord
+    from Bio.SeqFeature import SeqFeature, FeatureLocation, CompoundLocation
+    from kmer_count import *
+    from weblogolib import *
     spade = SPADE() 
     if args.input != "None":
         spade.load(args.input) 
     
-    #Nm, Nr,  Nq    
-    spade.run(args.num_threads,[args.Nk, args.Nw, args.Ng, args.Ns, args.Np, args.Nu, args.Nm, args.Nr, args.Nq, args.Pk, args.Pw, args.Pg, args.Ps, args.Pp, args.Pu, args.Pm, args.Pr, args.Pq, args.v, args.d])
+    if args.delete:
+        args.delete = 1 
+ 
+    spade.run(args.num_threads,[args.Nk, args.Nw, args.Ng, args.Ns, args.Np, args.Nu, args.Nm, args.Nr, args.Nq, args.Pk, args.Pw, args.Pg, args.Ps, args.Pp, args.Pu, args.Pm, args.Pr, args.Pq, args.v, args.delete])
     finish = open("finish.txt","w")
     finish.write("fnish")
     finish.close() 
