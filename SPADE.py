@@ -809,19 +809,22 @@ class HRA(object):
                             pre_end    = int(elements[12])
                             pre_evalue = float(elements[-2]) 
                             new_blast.append(elements) 
-                            
-                        #else:
-                        #    if float(elements[-2]) < pre_evalue: 
-                        #        consensus_motifs[-1] = consensus_motif 
-                        #        true_motifs[-1] = true_motif
-                        #        pre_end = int(elements[12])
-                        #        pre_evalue = float(elements[-2]) 
-                        #        new_blast[-1] = elements
-                        #    else:
-                        #        pass 
+                        
+                        #For only develop branch 
+                        else:
+                            if float(elements[-2]) < pre_evalue: 
+                                consensus_motifs[-1] = consensus_motif 
+                                true_motifs[-1] = true_motif
+                                pre_end = int(elements[12])
+                                pre_evalue = float(elements[-2]) 
+                                new_blast[-1] = elements
+                            else:
+                                pass 
+                        ####                
                     
-   
-                    #blast = new_blast
+                    #For only develop branch 
+                    blast = new_blast
+                    ####
 
                     #The following code search the start position of repeat motif.
                     for s, char_list in enumerate(list(zip(*consensus_motifs))):
