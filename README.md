@@ -103,9 +103,8 @@ For each detected repeat, the following files will be created.
 
 Software usage
 -------------------------------
-**SYNOPSIS**
-
 ````help
+SYNOPSIS
   SPADE [-h] [--help] [-in input_file] [-f input_file_format] [-t sequence_type] 
     [-Nk kmer_size] [-Nw window_size] [-Ns kmer_score_threshold] [-Ng gap_size] 
     [-Nm region_margin] [-Np period_threshold] [-Nq gap_frequency_threshold] 
@@ -117,7 +116,7 @@ Software usage
     [-V] [--version]
 
 DESCRIPTION
-   SPADE 1.0.0
+  SPADE 1.0.0
 
 OPTIONAL ARGUMENTS
  -h, --help
@@ -193,7 +192,7 @@ OPTIONAL ARGUMENTS
    Threshold for length of non-consensus region to be removed from a repeat motif
    Default = 5
 
- *** MAFFT and BLAST+ options
+ *** MAFFT and BLAST+ options (Uniplemented) 
  --mafft <'String'>
    Optional arguments for MAFFT can be defined with single quotations 
    Default = '--auto'

@@ -1134,8 +1134,8 @@ if __name__ == "__main__":
     args = p.parse_args()
     
     if args.help:
-        import spade_help
-        print(help_description)
+        import spade_help as sh
+        print(sh.help_description)
         exit() 
 
     if args.version:
