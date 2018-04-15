@@ -1,0 +1,4 @@
+https://www.ncbi.nlm.nih.gov/nuccore/NC_008532.1?from=0&to=940
+https://www.ncbi.nlm.nih.gov/nuccore/NC_008532.1?from=1002&to=2095
+https://www.ncbi.nlm.nih.gov/nuccore/NC_008532.1?from=2136&to=2952
+https://www.ncbi.nlm.nih.gov/nuccore/NC_008532.1?from=2951&to=3093

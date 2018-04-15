@@ -2,8 +2,9 @@ import os
 import sys 
 import matplotlib
 matplotlib.use("Agg")
+import matplotlib.font_manager as fm
 import matplotlib.colors as colors
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 import math
@@ -15,7 +16,12 @@ import warnings
 warnings.filterwarnings('ignore')
 
 template = {'legend.numpoints': 1, 'axes.axisbelow': True, 'axes.labelcolor': '.15', 'ytick.major.width': 1.0, 'ytick.major.size': 4.0, 'axes.grid': False, 'ytick.minor.size': 0.0, 'legend.scatterpoints': 1, 'axes.edgecolor': "black", 'grid.color': 'white', 'legend.frameon': False, 'ytick.color': '.15', 'xtick.major.size': 4.0, 'xtick.major.width': 1.0, 'figure.facecolor': "#EAEAF2", 'xtick.color': '.15', 'xtick.minor.size': 3.0, 'xtick.direction': u'out', 'lines.solid_capstyle': u'round', 'grid.linestyle': u'-', 'image.cmap': u'Greys', 'axes.facecolor': "white", 'text.color': '.15', 'ytick.direction': u'out', 'axes.linewidth': 1.0}
-sns.set(font = "Helvetica")
+fonts = [font.split("/")[-1] for font in fm.findSystemFonts()]
+if "Helvetica.ttf" in fonts:
+    sns.set(font = "Helvetica")
+else:
+    sns.set(font = "Arial")
+
 sns.set_context("poster", font_scale=1.4, rc={"lines.linewidth": 1.0}) 
 sns.set_style(template)
 
@@ -302,7 +308,7 @@ def motif_logo(dtype):
         options.tic_length         = 7
         options.fineprint          = ""
         options.color_scheme = std_color_schemes["classic"]
-        options.yaxis_label        = ""
+        options.yaxis_label        = "Bits"
         options.yaxis_tic_interval = 1
         options.yaxis_minor_tic_ratio = 2   
         format = LogoFormat(data, options)
@@ -330,7 +336,7 @@ def motif_logo(dtype):
         options.tic_length         = 7
         options.fineprint          = ""
         options.color_scheme       = std_color_schemes["chemistry"]
-        options.yaxis_label        = ""
+        options.yaxis_label        = "Bits"
         options.yaxis_tic_interval = 2
         options.yaxis_minor_tic_ratio = 2   
         format = LogoFormat(data, options)
