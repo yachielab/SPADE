@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import os
 import csv
 import sys
@@ -123,7 +123,7 @@ class SPADE(object):
 
 class LOCUS(object):
     #Nm, Nr,  Nq
-    def __init__(self, seq, record, k_size, w_size, g_size, tk, tp, tb, tm, tr, tq, pk_size, pw_size, pg_size, ptk, ptp, ptb, ptm, ptr, ptq, visualisation, delete, format_type):
+    def __init__(self, seq, record, k_size, w_size, g_size, tk, tp, tb, tm, tr, tq, pk_size, pw_size, pg_size, ptk, ptp, ptb, ptm, ptr, ptq, visualisation, delete, option_mafft, option_blastn, option_blastp, format_type):
         self.HRA_list      = []
         self.Id            = record.id 
         self.seq           = seq
@@ -147,6 +147,9 @@ class LOCUS(object):
         self.ptm           = ptm
         self.ptq           = ptq
         self.ptr           = ptr
+        self.option_mafft  = option_mafft 
+        self.option_blastn = option_blastn
+        self.option_blastp = option_blastp
         self.format_type   = format_type
         self.process       = "None"
         self.seqtype       = "nucl"
@@ -180,13 +183,13 @@ class LOCUS(object):
         output_dir_list = []
         for feat in self.record.features:
             if feat.type == "CDS" and "translation" in feat.qualifiers.keys():
-                hra = HRA(i, "prot", self.pk_size, self.pw_size, self.pg_size, self.ptk, self.ptp, self.ptb, self.ptm, self.ptq, self.ptr)
+                hra = HRA(i, "prot", self.pk_size, self.pw_size, self.pg_size, self.ptk, self.ptp, self.ptb, self.ptm, self.ptq, self.ptr, self.option_mafft, self.option_blastn, self.option_blastp)
                 region_score_array, phra_range_list = kmer_count(feat.qualifiers["translation"][0], self.pk_size, self.pw_size, thresh=self.ptk, gap=self.pg_size, buf=self.pw_size,seqtype="prot")
                 if len(phra_range_list) < 1:
                     pass 
                 else:
                     for j in range(len(phra_range_list)):
-                        hra = HRA(i+j, "prot", self.pk_size, self.pw_size, self.pg_size, self.ptk, self.ptp, self.ptb, self.ptm, self.ptq, self.ptr)
+                        hra = HRA(i+j, "prot", self.pk_size, self.pw_size, self.pg_size, self.ptk, self.ptp, self.ptb, self.ptm, self.ptq, self.ptr, self.option_mafft, self.option_blastn, self.option_blastp)
                         hra.hra_range          = phra_range_list[j]  
                         hra.region_score_array = region_score_array[hra.hra_range[2]:hra.hra_range[3]]
                         hra.feature            = feat
@@ -219,9 +222,9 @@ class LOCUS(object):
         HRA.seq_len = len(self.seq) 
         for i, hra_range in enumerate(self.hra_range_list):
             if self.seqtype == "nucl":
-                hra = HRA(i, "nucl", self.k_size, self.w_size, self.g_size, self.tk, self.tp, self.tb, self.tm, self.tq, self.tr)
+                hra = HRA(i, "nucl", self.k_size, self.w_size, self.g_size, self.tk, self.tp, self.tb, self.tm, self.tq, self.tr, self.option_mafft, self.option_blastn, self.option_blastp)
             else:
-                hra = HRA(i, "prot", self.pk_size, self.pw_size, self.pg_size, self.ptk, self.ptp, self.ptb, self.ptm, self.ptq, self.ptr)
+                hra = HRA(i, "prot", self.pk_size, self.pw_size, self.pg_size, self.ptk, self.ptp, self.ptb, self.ptm, self.ptq, self.ptr, self.option_mafft, self.option_blastn, self.option_blastp)
             hra.record, hra.features  = hra.extract(self.record,hra_range[2],hra_range[3])  
             hra.region_seq = str(hra.record.seq).upper() 
             hra.region_score_array = self.score_array[hra_range[2]:hra_range[3]]
@@ -435,7 +438,7 @@ class HRA(object):
     record      = None
     seq_len     = None
     window_size = 1000
-    def __init__(self, Id, dtype, ksize, wsize, gsize, tk, tp, tb, tm, tq, tr): 
+    def __init__(self, Id, dtype, ksize, wsize, gsize, tk, tp, tb, tm, tq, tr, optionm, optionbn, optionbp): 
         self.Id                 = Id
         self.output_dir         = ""
         self.hra_range          = []
@@ -446,22 +449,25 @@ class HRA(object):
         self.region_seq         = [] 
         self.peak_period_set    = [] 
         self.periodicity        = [] 
-        self.dtype        = dtype 
-        self.k_size       = ksize
-        self.w_size       = wsize
-        self.g_size       = gsize
-        self.tk           = tk
-        self.tp           = tp
-        self.tb           = tb
-        self.tm           = tm 
-        self.tq           = tq 
-        self.tr           = tr
-        self.p_start      = 0
-        self.p_end        = 0
-        self.mattf_com    = ""
-        self.blast_com    = ""
-        self.feature      = None
-        self.strand       = None
+        self.dtype         = dtype 
+        self.k_size        = ksize
+        self.w_size        = wsize
+        self.g_size        = gsize
+        self.tk            = tk
+        self.tp            = tp
+        self.tb            = tb
+        self.tm            = tm 
+        self.tq            = tq 
+        self.tr            = tr
+        self.option_mafft  = optionm
+        self.option_blastn = optionbn
+        self.option_blastp = optionbp
+        self.p_start       = 0
+        self.p_end         = 0
+        self.mattf_com     = ""
+        self.blast_com     = ""
+        self.feature       = None
+        self.strand        = None
 
     def kmer_period_matrix(self):
         self.period_matrix, self.region_score_array, self.kmer_position_dict  = kmer_count_matrix(self.region_seq, self.k_size, self.w_size, seqtype=self.dtype)
@@ -665,9 +671,9 @@ class HRA(object):
                 fasta_name =  "./" + self.output_dir + "/unit_seq.fasta"
             
             if self.dtype == "nucl":
-                mafft_coms.append("mafft {} --quiet {} > {}".format("--auto", fasta_name, fasta_name.replace("unit_seq.fasta","align.unit_seq.fasta"))) 
+                mafft_coms.append("mafft {} --quiet {} > {}".format(self.option_mafft, fasta_name, fasta_name.replace("unit_seq.fasta","align.unit_seq.fasta"))) 
             else: 
-                mafft_coms.append("mafft {} --quiet --amino {} > {}".format("--auto", fasta_name, fasta_name.replace("unit_seq.fasta","align.unit_seq.fasta")))
+                mafft_coms.append("mafft {} --quiet --amino {} > {}".format(self.option_mafft, fasta_name, fasta_name.replace("unit_seq.fasta","align.unit_seq.fasta")))
         self.mafft_com = "|".join(mafft_coms) 
         if Exec == 1:
             subprocess.call(self.mafft_com,shell=True)
@@ -900,11 +906,11 @@ class HRA(object):
                 blast_name   = "./" +  self.output_dir + "/blast.txt"
             
             if self.dtype == "nucl":
-                options   = '-strand plus -task blastn-short -penalty -2 -outfmt "6 qseqid qseq sseqid sseq pident qlen length mismatch gapopen qstart qend sstart send gaps evalue bitscore"'
-                blast_com = "blastn -query {} -subject {} {} -out {}".format(query_name, subject_name, options, blast_name) 
+                #options   = '-strand plus -task blastn-short -penalty -2 -outfmt "6 qseqid qseq sseqid sseq pident qlen length mismatch gapopen qstart qend sstart send gaps evalue bitscore"'
+                blast_com = "blastn -query {} -subject {} {} -out {}".format(query_name, subject_name, self.option_blastn, blast_name) 
             else:
-                options   = '-task blastp-short -outfmt "6 qseqid qseq sseqid sseq pident qlen length mismatch gapopen qstart qend sstart send gaps evalue bitscore"'
-                blast_com = "blastp -query {} -subject {} {} -out {}".format(query_name, subject_name, options, blast_name) 
+                #options   = '-task blastp-short -outfmt "6 qseqid qseq sseqid sseq pident qlen length mismatch gapopen qstart qend sstart send gaps evalue bitscore"'
+                blast_com = "blastp -query {} -subject {} {} -out {}".format(query_name, subject_name, self.option_blastp, blast_name) 
         
             blast_coms.append(blast_com)
         self.blast_com = "|".join(blast_coms)
@@ -1117,36 +1123,40 @@ class HRA(object):
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser(add_help=False)
-    p.add_argument("-V", "--version", action="store_true", default=argparse.SUPPRESS)
-    p.add_argument('-h', "--help", action='store_true', default=argparse.SUPPRESS, help='Print USAGE, DESCRIPTION and ARGUMENTS; ignore all other parameters') 
+    p.add_argument("-V", "--version", action="store_true", default=False)
+    p.add_argument('-h', "--help", action='store_true', default=False) 
 
-    p.add_argument("-in","--input", type=str, default="None", help="Input file name", metavar="input_file")
-    p.add_argument("-f", type=str, default="auto", choices=("genbank","fasta","auto"), help="Input file type. Permissible values: ‘genbank’ ‘fasta’ ‘auto’. Default = 'auto'", metavar="input_file_format")
-    p.add_argument("-t", type=str, default="auto", choices=("auto","nucl","protein"), help="Sequence type. Permissible values: ‘nucl’ ‘prot’ ‘auto’. Default = 'auto'", metavar="sequence_type")
+    p.add_argument("-in","--input", type=str, default="None", help="Input file name")
+    p.add_argument("-f", type=str, default="auto", choices=("genbank","fasta","auto"))
+    p.add_argument("-t", type=str, default="auto", choices=("auto","nucl","protein"))
 
-    p.add_argument("-Nk", type=int, default=10, help="k-mer size", metavar="nucl_kmer_size")
-    p.add_argument("-Nw", type=int, default=1000, help="Size of sliding window to calculate cumulative k-mer distribution", metavar="nucl_window_size")
-    p.add_argument("-Ns", type=int, default=20, help="Threshold for peak height of each cumulative k-mer count area", metavar="nucl_kmer_score_threshold")  
-    p.add_argument("-Nm", type=int, default=1000, help="Size of margin to be evaluated with each detected highly repetitive region", metavar="nucl_margin_size")
-    p.add_argument("-Ng", type=int, default=200, help="Threshold for gap size between significant k-mer count areas", metavar="nucl_gap_size")
-    p.add_argument("-Np", type=float, default=0.5, help="Periodicity score threshold for each detected highly repetitive region", metavar="nucl_period_threshold")
-    p.add_argument("-Nq", type=float, default=0.5, help="Gap frequency threshold for each position of a repeat motif to be removed", metavar="nucl_gap_frequency")
-    p.add_argument("-Nu", type=float, default=0.8, help="Threshold for letter consistency score at each position of a repeat motif", metavar="nucl_cosistency_threshold")
-    p.add_argument("-Nr", type=int, default=5, help="Threshold for length of non-consensus region to be removed from a repeat motif", metavar="nucl_non_consensus_length_threshold")
+    p.add_argument("-Nk", type=int, default=10)
+    p.add_argument("-Nw", type=int, default=1000)
+    p.add_argument("-Ns", type=int, default=20)  
+    p.add_argument("-Nm", type=int, default=1000)
+    p.add_argument("-Ng", type=int, default=200)
+    p.add_argument("-Np", type=float, default=0.5)
+    p.add_argument("-Nq", type=float, default=0.5)
+    p.add_argument("-Nu", type=float, default=0.8)
+    p.add_argument("-Nr", type=int, default=5)
     
-    p.add_argument("-Pk", type=int, default=3, help="k-mer size", metavar="prot_kmer_size")
-    p.add_argument("-Pw", type=int, default=300, help="Size of sliding window to calculate cumulative k-mer distribution", metavar="prot_window_size")
-    p.add_argument("-Ps", type=int, default=6, help="Threshold for peak height of each cumulative k-mer count area", metavar="prot_kmer_score_threshold")  
-    p.add_argument("-Pm", type=int, default=300, help="Size of margin to be evaluated with each detected highly repetitive region", metavar="prot_margin_size")
-    p.add_argument("-Pg", type=int, default=50, help="Threshold for gap size between significant k-mer count areas", metavar="prot_gap_size")
-    p.add_argument("-Pp", type=float, default=0.3, help="Periodicity score threshold for each detected highly repetitive region", metavar="prot_period_threshold")
-    p.add_argument("-Pq", type=float, default=0.5, help="Gap frequency threshold for each position of a repeat motif to be removed", metavar="prot_gap_frequency")
-    p.add_argument("-Pu", type=float, default=0.8, help="Threshold for letter consistency score at each position of a repeat motif", metavar="prot_cosistency_threshold")
-    p.add_argument("-Pr", type=int, default=5, help="Threshold for length of non-consensus region to be removed from a repeat motif", metavar="prot_non_consensus_length_threshold")
+    p.add_argument("-Pk", type=int, default=3)
+    p.add_argument("-Pw", type=int, default=300)
+    p.add_argument("-Ps", type=int, default=6)  
+    p.add_argument("-Pm", type=int, default=300)
+    p.add_argument("-Pg", type=int, default=50)
+    p.add_argument("-Pp", type=float, default=0.3)
+    p.add_argument("-Pq", type=float, default=0.5)
+    p.add_argument("-Pu", type=float, default=0.8)
+    p.add_argument("-Pr", type=int, default=5)
     
-    p.add_argument("-n", "--num_threads", type=int, default=1, help="Number of CPU threads. If this is set to more than 1, SPADE runs multiple processes for multiple sequence entries in parallel.", metavar="num_threads") 
-    p.add_argument("-v", type=str, default="Y", choices=("Y","N"), help="Generate pdf files to visualize results for each detected repeat region")
-    p.add_argument("-d", "--delete", action="store_true", help="This option deletes descendant output folders of highly repetitive regions that are detected not to contain periodic repeats")
+    p.add_argument("--mafft", type=str, default="--auto") 
+    p.add_argument("--blastn", type=str, default='-strand plus -task blastn-short -penalty -2 -outfmt "6 qseqid qseq sseqid sseq pident qlen length mismatch gapopen qstart qend sstart send gaps evalue bitscore"') 
+    p.add_argument("--blastp", type=str, default='-task blastp-short -outfmt "6 qseqid qseq sseqid sseq pident qlen length mismatch gapopen qstart qend sstart send gaps evalue bitscore"')
+
+    p.add_argument("-n", "--num_threads", type=int, default=1) 
+    p.add_argument("-v", type=str, default="Y", choices=("Y","N"))
+    p.add_argument("-d", "--delete", action="store_true", default=False)
     args = p.parse_args()
     
     if args.help:
@@ -1176,7 +1186,7 @@ if __name__ == "__main__":
     if args.delete:
         args.delete = 1 
  
-    spade.run(args.num_threads,[args.Nk, args.Nw, args.Ng, args.Ns, args.Np, args.Nu, args.Nm, args.Nr, args.Nq, args.Pk, args.Pw, args.Pg, args.Ps, args.Pp, args.Pu, args.Pm, args.Pr, args.Pq, args.v, args.delete])
+    spade.run(args.num_threads,[args.Nk, args.Nw, args.Ng, args.Ns, args.Np, args.Nu, args.Nm, args.Nr, args.Nq, args.Pk, args.Pw, args.Pg, args.Ps, args.Pp, args.Pu, args.Pm, args.Pr, args.Pq, args.v, args.delete, args.mafft, args.blastn, args.blastp])
     finish = open("finish.txt","w")
     finish.write("fnish")
     finish.close() 
