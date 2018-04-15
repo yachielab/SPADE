@@ -317,8 +317,12 @@ def motif_logo(dtype):
         fout = open("weblogo.pdf","wb")
         fout.write(pdf_formatter(data, format))
         fout.close()	
-        fout = open("weblogo.txt","wb")
-        fout.write(txt_formatter(data, format).decode("utf-8"))    
+        try:
+            fout = open("weblogo.txt","wb")
+            fout.write(txt_formatter(data, format).decode("utf-8"))    
+        except:
+            fout = open("weblogo.txt","wb")
+            fout.write(txt_formatter(data, format))    
         fout.close()
 
     else:
@@ -345,8 +349,12 @@ def motif_logo(dtype):
         fout = open("weblogo.pdf","wb")
         fout.write(pdf_formatter(data, format))
         fout.close()
-        fout = open("weblogo.txt","wb")
-        fout.write(txt_formatter(data, format).decode("utf-8"))    
+        try:
+            fout = open("weblogo.txt","wb")
+            fout.write(txt_formatter(data, format).decode("utf-8"))    
+        except:
+            fout = open("weblogo.txt","wb")
+            fout.write(txt_formatter(data, format))    
         fout.close()
 
 def load_data(dtype, strand, ksize ,thresh, Format="pdf"):

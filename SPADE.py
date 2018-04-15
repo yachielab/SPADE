@@ -694,8 +694,12 @@ class HRA(object):
                 data.alphabet = std_alphabets["dna"]
                 options       = LogoOptions()
                 format        = LogoFormat(data, options)
-                fout          = open("weblogo.txt","w")
-                fout.write(txt_formatter(data, format).decode('utf-8'))	
+                try:
+                    fout = open("weblogo.txt","wb")
+                    fout.write(txt_formatter(data, format).decode("utf-8"))    
+                except:
+                    fout = open("weblogo.txt","wb")
+                    fout.write(txt_formatter(data, format))    
                 fout.close()
             else:
                 seqs.alphabet = std_alphabets["protein"] 
@@ -703,8 +707,12 @@ class HRA(object):
                 data.alphabet = std_alphabets["protein"] 
                 options       = LogoOptions()
                 format        = LogoFormat(data, options)
-                fout          = open("weblogo.txt","w")
-                fout.write(txt_formatter(data, format).decode('utf-8'))
+                try:
+                    fout = open("weblogo.txt","wb")
+                    fout.write(txt_formatter(data, format).decode("utf-8"))    
+                except:
+                    fout = open("weblogo.txt","wb")
+                    fout.write(txt_formatter(data, format))    
                 fout.close()
         
             fasta         = SeqIO.to_dict(SeqIO.parse(fasta_name,"fasta"))
