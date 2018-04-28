@@ -12,6 +12,8 @@ import shutil
 import collections
 import subprocess
 
+__version__ = "1.0.0"
+
 def savetxt(file_name,data,delimiter="\t",fmt=":.0f",header=""):
     if len(data.shape) == 1:
         with open(file_name,"w") as o:
@@ -1157,7 +1159,7 @@ if __name__ == "__main__":
         exit() 
 
     if args.version:
-        print("SPADE: 1.0.0") 
+        print("SPADE: {}".format(__version__)) 
         exit()
     
     import numpy as np 
