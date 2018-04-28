@@ -219,3 +219,4 @@ OPTIONAL ARGUMENTS
    This option deletes descendant output folders of highly repetitive regions
    that are detected not to contain periodic repeats
 ````
+

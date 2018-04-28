@@ -12,6 +12,8 @@ import shutil
 import collections
 import subprocess
 
+__version__ = "1.0.0"
+
 def savetxt(file_name,data,delimiter="\t",fmt=":.0f",header=""):
     if len(data.shape) == 1:
         with open(file_name,"w") as o:
@@ -196,14 +198,14 @@ class LOCUS(object):
                         hra.strand             = feat.strand 
                         hra.region_seq         = str(feat.qualifiers["translation"][0][hra.hra_range[2]:hra.hra_range[3]]).upper()
                         if feat.location.start == 1 and feat.location.end == hra.seq_len:
-                            hra.p_start = feat.location.parts[0].start.position
-                            hra.p_end   = feat.location.parts[-1].end.position
+                            hra.p_start = feat.location.parts[0].start.position + 3 * hra.hra_range[0]
+                            hra.p_end   = feat.location.parts[0].start.position + 3 * hra.hra_range[1] 
                                 
                         else:
-                            hra.p_start     = feat.location.start.position         
-                            hra.p_end       = feat.location.end.position
+                            hra.p_start     = feat.location.start.position + 3 * hra.hra_range[0]         
+                            hra.p_end       = feat.location.start.position + 3 * hra.hra_range[1]
                         
-                        hra.output_dir  = "_".join([hra.dtype,str(hra.p_start),str(hra.p_end),str(hra.hra_range[0]),str(hra.hra_range[1])])
+                        hra.output_dir  = "_".join([hra.dtype,str(hra.p_start),str(hra.p_end)])
                         afeat           = copy.deepcopy(feat) 
                         afeat.location  = FeatureLocation(0,len(feat.qualifiers["translation"][0]))
                         hra.features    = [afeat]
@@ -1173,7 +1175,7 @@ if __name__ == "__main__":
         exit() 
 
     if args.version:
-        print("SPADE: 1.0.0") 
+        print("SPADE: {}".format(__version__)) 
         exit()
     
     import numpy as np 

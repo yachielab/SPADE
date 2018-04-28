@@ -11,18 +11,24 @@ FEATURES             Location/Qualifiers
                      /locus_tag="STER_RS03505"
                      /old_locus_tag="STER_0712"
      CDS             1..940
-                     /codon_start=1
-                     /db_xref="GI:500000241"
-                     /inference="EXISTENCE: similar to AA sequence:RefSeq:WP_011225728.1"
                      /locus_tag="STER_RS03505"
-                     /note="Derived by automated computational analysis using gene prediction method: Protein Homology."
                      /old_locus_tag="STER_0712"
+                     /inference="EXISTENCE: similar to AA
+                     sequence:RefSeq:WP_011225728.1"
+                     /note="Derived by automated computational analysis using
+                     gene prediction method: Protein Homology."
+                     /codon_start=1
+                     /transl_table=11
                      /product="hypothetical protein"
                      /protein_id="WP_011680959.1"
-                     /transl_table=11
-                     /translation="MKFFVRHPYKDRIELNIGAITQIVGQNNELKYYILQILSWYFGGKKYSREDLSIFDYEEPTILDEAREIVKRSSYHYIDISTFKDLLEQMEYKKGTLAHGYLRKIVNQVDIVGHLEKINEQVELIEEAMNRHINLNCGQVEYHLENLPLTLDQLLTKNFSPFFTI
-                     ENKNLSFEWVSNIDKLSLFLEMLDHLLLQTTEKYLIVLKNIDGFISEESYTIFYRQICHLVKKYPNLTFILFPSDQGYLKIDEENSRFVNILSDQVEHLYDVEFMYERVMKYYPSNDFPTREGFRMSLETVTPYLLTKMLRQPSLSLVDSVILNILNQLFHFSYRIRYLQKSDEKLLQK
-                     FLESKD"
+                     /db_xref="GI:500000241"
+                     /translation="MKFFVRHPYKDRIELNIGAITQIVGQNNELKYYILQILSWYFGGK
+                     KYSREDLSIFDYEEPTILDEAREIVKRSSYHYIDISTFKDLLEQMEYKKGTLAHGYLRK
+                     IVNQVDIVGHLEKINEQVELIEEAMNRHINLNCGQVEYHLENLPLTLDQLLTKNFSPFF
+                     TIENKNLSFEWVSNIDKLSLFLEMLDHLLLQTTEKYLIVLKNIDGFISEESYTIFYRQI
+                     CHLVKKYPNLTFILFPSDQGYLKIDEENSRFVNILSDQVEHLYDVEFMYERVMKYYPSN
+                     DFPTREGFRMSLETVTPYLLTKMLRQPSLSLVDSVILNILNQLFHFSYRIRYLQKSDEK
+                     LLQKFLESKD"
      repeat_region   1003..2095
                      /inference="COORDINATES: alignment:crt:1.2"
                      /inference="COORDINATES: alignment:pilercr:v1.02"
@@ -30,48 +36,63 @@ FEATURES             Location/Qualifiers
                      /rpt_type=direct
                      /rpt_unit_range=649125..649160
                      /rpt_unit_seq="gtttttgtactctcaagatttaagtaactgtacaac"
-     repeat_region   join(1003..1038,1068..1103,1134..1169,1200..1235,1266..1301,1332..1367,1398..1433,1464..1499,1531..1566,1597..1632,1663..1698,1730..1765,1796..1831,1862..1897,1928..1963,
-                     1994..2029,2060..2095)
+     repeat_region   join(1003..1038,1068..1103,1134..1169,1200..1235,
+                     1266..1301,1332..1367,1398..1433,1464..1499,1531..1566,
+                     1597..1632,1663..1698,1730..1765,1796..1831,1862..1897,
+                     1928..1963,1994..2029,2060..2095)
+                     /note="Auto annotated by SPADE"
                      /dir_name="nucl_649122_650215"
                      /hrr_range="649122,650215,648122,651215"
-                     /note="Auto annotated by SPADE"
-                     /period="66"
-                     /periodicity_score="0.979306832498"
+                     /periodicity_score="0.9793068324979226"
                      /rpt_num="17"
-                     /rpt_type=inter_space
                      /rpt_unit_seq="GTTTTTGTACTCTCAAGATTTAAGTAACTGTACAAC"
+                     /rpt_type=inter_space
+                     /unmasked_rpt_unit_seq="GTTTTTGTACTCTCAAGATTTAAGTAACTGTACAA
+                     C"
+                     /period="66"
                      /sequence_type="nucl"
-                     /unmasked_rpt_unit_seq="GTTTTTGTACTCTCAAGATTTAAGTAACTGTACAAC"
      gene            complement(2137..2952)
                      /locus_tag="STER_RS03510"
                      /old_locus_tag="STER_0713"
      CDS             complement(2137..2952)
-                     /codon_start=1
-                     /db_xref="GI:500000242"
-                     /inference="EXISTENCE: similar to AA sequence:RefSeq:WP_002952695.1"
                      /locus_tag="STER_RS03510"
-                     /note="Derived by automated computational analysis using gene prediction method: Protein Homology."
                      /old_locus_tag="STER_0713"
-                     /product="phosphate ABC transporter substrate-binding protein"
-                     /protein_id="WP_011680960.1"
+                     /inference="EXISTENCE: similar to AA
+                     sequence:RefSeq:WP_002952695.1"
+                     /note="Derived by automated computational analysis using
+                     gene prediction method: Protein Homology."
+                     /codon_start=1
                      /transl_table=11
-                     /translation="MLRFLILSGYFELVMYLQVSGKLNQYINIHYSYLAYISMALSFILALVQLIVWMKKIKVHSHLSGRVAKGASIVLLAFPVLTGLLVPTVTLDANTVSAKGYHFPLAAGSDPNQADQEGTTIQYLKPDTSSYFTSSAYEKEMTKELAKYKGRETIQITTENYMEVM
-                     ELIYLYPNDFVGKKVTYTGFVYNDPQTEGYQFIFRFGIIHCIADSGVYGLATTGSDQTFKDNTWVTVTGTITVNYYQNLKQSLPILNLTEVKEVSQPDNPYVYRVF"
+                     /product="phosphate ABC transporter substrate-binding
+                     protein"
+                     /protein_id="WP_011680960.1"
+                     /db_xref="GI:500000242"
+                     /translation="MLRFLILSGYFELVMYLQVSGKLNQYINIHYSYLAYISMALSFIL
+                     ALVQLIVWMKKIKVHSHLSGRVAKGASIVLLAFPVLTGLLVPTVTLDANTVSAKGYHFP
+                     LAAGSDPNQADQEGTTIQYLKPDTSSYFTSSAYEKEMTKELAKYKGRETIQITTENYME
+                     VMELIYLYPNDFVGKKVTYTGFVYNDPQTEGYQFIFRFGIIHCIADSGVYGLATTGSDQ
+                     TFKDNTWVTVTGTITVNYYQNLKQSLPILNLTEVKEVSQPDNPYVYRVF"
      gene            complement(2952..3854)
                      /locus_tag="STER_RS03515"
                      /old_locus_tag="STER_0714"
      CDS             complement(2952..3854)
-                     /codon_start=1
-                     /db_xref="GI:500000243"
-                     /inference="EXISTENCE: similar to AA sequence:RefSeq:WP_014608141.1"
                      /locus_tag="STER_RS03515"
-                     /note="Derived by automated computational analysis using gene prediction method: Protein Homology."
                      /old_locus_tag="STER_0714"
+                     /inference="EXISTENCE: similar to AA
+                     sequence:RefSeq:WP_014608141.1"
+                     /note="Derived by automated computational analysis using
+                     gene prediction method: Protein Homology."
+                     /codon_start=1
+                     /transl_table=11
                      /product="hypothetical protein"
                      /protein_id="WP_011680961.1"
-                     /transl_table=11
-                     /translation="MAIFHQLPDSVFQLLAVFLSIIIEALPFVLLGSIVSGFIEVFLTPEKVQNFLPKNKVLAILFGTLIGFIFPSCECGIVPIITRFLEKKVPSYTAIPFMATAPIINPVVLFATYTAFGNSWYYVFLRFLGAFLIAMILGILLGFVVDDQILKENRKVSHVHDYSGL
-                     SAGKKVFQALIHAVDEFFDTGRYLIFGSLVAASMQTYLPTRILTTIGHNSVTAILIMMLLAFILSLCSEADAFIGASLLSSFGVAPTVAFLIIGPMVDIKNLIMMKHQFKTRFVGLFVGTASLVTVIYCLVLGVI"
+                     /db_xref="GI:500000243"
+                     /translation="MAIFHQLPDSVFQLLAVFLSIIIEALPFVLLGSIVSGFIEVFLTP
+                     EKVQNFLPKNKVLAILFGTLIGFIFPSCECGIVPIITRFLEKKVPSYTAIPFMATAPII
+                     NPVVLFATYTAFGNSWYYVFLRFLGAFLIAMILGILLGFVVDDQILKENRKVSHVHDYS
+                     GLSAGKKVFQALIHAVDEFFDTGRYLIFGSLVAASMQTYLPTRILTTIGHNSVTAILIM
+                     MLLAFILSLCSEADAFIGASLLSSFGVAPTVAFLIIGPMVDIKNLIMMKHQFKTRFVGL
+                     FVGTASLVTVIYCLVLGVI"
 ORIGIN
         1 gagctggtat tttggtggaa aaaaatactc gagagaggac ttaagtattt ttgattatga
        61 ggagcctacc atacttgatg aggccagaga aatagtgaaa cgaagtagct atcactatat
