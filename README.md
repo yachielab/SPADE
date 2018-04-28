@@ -54,7 +54,7 @@ please use the follwoing commands instead of the above ones.
 
 ```pip install --user -I biopython```
 
-After the execution of the above commands, please set PYTHONPATH to ```/Users/[USER NAME]/Library/Python/2.7/lib/python/site-packages```
+After the execution of the above commands, please set PYTHONPATH to ```/Users/[USER_NAME]/Library/Python/2.7/lib/python/site-packages```
 
 3\. Install MAFFT if it is not installed. MAFFT package is available at the following links.
 
