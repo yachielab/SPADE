@@ -37,7 +37,7 @@ If pip is not installed, please download [get-pip.py](https://bootstrap.pypa.io/
 
 ```pyhton get-pip.py```
 
-\*If you use default Python in OSX or macOS and encounter the mesaage in the executioin of ```python get-pip.py```,
+\*If you use default Python in OSX or macOS and encounter the following message in the executioin of ```python get-pip.py```,
 
 ````
 matplotlib 1.3.1 requires nose, which is not installed.
