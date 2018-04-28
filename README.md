@@ -35,6 +35,21 @@ If pip is not installed, please download [get-pip.py](https://bootstrap.pypa.io/
 
 ```pyhton get-pip.py```
 
+If you use default python in Mac and encounter the mesaage in the executioin of the command,
+
+````
+
+````
+
+please use the follwoing commands instead of the above ones.
+
+```pyhton get-pip.py --user```
+
+```pip install --user -I seaborn ```
+
+```pip install --user -I weblogo```
+
+```pip install --user -I biopython```
 
 3\. Install MAFFT if it is not installed. MAFFT package is available at the following links.
 
