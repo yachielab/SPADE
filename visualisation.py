@@ -316,11 +316,16 @@ def motif_logo(dtype):
         format = LogoFormat(data, options)
         fout = open("weblogo.pdf","wb")
         try:
+            fout = open("weblogo.pdf","wb")
             fout.write(pdf_formatter(data, format))
+            fout.close() 
         except:
-            warnings.warn("Ghostscript was not found. If you want to generate LOGO in pdf format, please install Ghostscript.\n For the present, LOGO in EPS formated was output") 
+            fout.close()
+            warnings.warn("Ghostscript was not found. If you want to generate LOGO in pdf format, please install Ghostscript.\n For the present, LOGO was output in EPS format") 
+            os.sytem("rm -rf weblogo.pdf") 
+            fout = open("weblogo.eps","wb")
             fout.write(eps_formatter(data, format))
-        fout.close()	
+            fout.close() 
         try:
             fout = open("weblogo.txt","wb")
             fout.write(txt_formatter(data, format).decode("utf-8"))    
@@ -350,13 +355,17 @@ def motif_logo(dtype):
         options.yaxis_tic_interval = 2
         options.yaxis_minor_tic_ratio = 2   
         format = LogoFormat(data, options)
-        fout = open("weblogo.pdf","wb")
         try:
+            fout = open("weblogo.pdf","wb")
             fout.write(pdf_formatter(data, format))
+            fout.close() 
         except:
-            warnings.warn("Ghostscript was not found. If you want to generate LOGO in pdf format, please install Ghostscript.\n For the present, LOGO in EPS formated was output") 
+            fout.close()
+            warnings.warn("Ghostscript was not found. If you want to generate LOGO in pdf format, please install Ghostscript.\n For the present, LOGO was output in EPS format") 
+            os.sytem("rm -rf weblogo.pdf") 
+            fout = open("weblogo.eps","wb")
             fout.write(eps_formatter(data, format))
-        fout.close()
+            fout.close()
         try:
             fout = open("weblogo.txt","wb")
             fout.write(txt_formatter(data, format).decode("utf-8"))    
