@@ -1,4 +1,5 @@
 *.pyc
+README.html
 /example/*
 !/example/*.gbff
 !/example/NC_008532.1/
