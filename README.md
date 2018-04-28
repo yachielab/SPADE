@@ -33,18 +33,18 @@ To execute SPADE using linux/unix commands, add the SPADE directory to \$PATH an
 
 ```pip install biopython```
 
-If pip is not installed, please download [get-pip.py](https://bootstrap.pypa.io/get-pip.py). Then, pip will be avaiable by the following commands. After that, please retry the above commands.
+If pip is not installed, please download [get-pip.py](https://bootstrap.pypa.io/get-pip.py). Then, pip will be available by the following commands. After that, please retry the above commands.
 
-```pyhton get-pip.py```
+```python get-pip.py```
 
-\*If you use default Python in OSX or macOS and encounter the following message in the executioin of ```python get-pip.py```,
+\*If you use default Python in OSX or macOS and encounter the following message in the execution of ```python get-pip.py```,
 
 ````
 matplotlib 1.3.1 requires nose, which is not installed.
 matplotlib 1.3.1 requires tornado, which is not installed.
 ````
 
-please use the follwoing commands instead of the above ones.
+please use the following commands instead of the above ones.
 
 ```pyhton get-pip.py --user```
 
