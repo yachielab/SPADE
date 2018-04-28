@@ -351,7 +351,11 @@ def motif_logo(dtype):
         options.yaxis_minor_tic_ratio = 2   
         format = LogoFormat(data, options)
         fout = open("weblogo.pdf","wb")
-        fout.write(pdf_formatter(data, format))
+        try:
+            fout.write(pdf_formatter(data, format))
+        except:
+            warnings.warn("Ghostscript was not found. If you want to generate LOGO in pdf format, please install Ghostscript.\n For the present, LOGO in EPS formated was output") 
+            fout.write(eps_formatter(data, format))
         fout.close()
         try:
             fout = open("weblogo.txt","wb")
