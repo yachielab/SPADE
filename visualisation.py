@@ -322,7 +322,7 @@ def motif_logo(dtype):
         except:
             fout.close()
             warnings.warn("Ghostscript was not found. If you want to generate LOGO in pdf format, please install Ghostscript.\n For the present, LOGO was output in EPS format") 
-            os.sytem("rm -rf weblogo.pdf") 
+            os.system("rm -rf weblogo.pdf") 
             fout = open("weblogo.eps","wb")
             fout.write(eps_formatter(data, format))
             fout.close() 
@@ -362,7 +362,7 @@ def motif_logo(dtype):
         except:
             fout.close()
             warnings.warn("Ghostscript was not found. If you want to generate LOGO in pdf format, please install Ghostscript.\n For the present, LOGO was output in EPS format") 
-            os.sytem("rm -rf weblogo.pdf") 
+            os.system("rm -rf weblogo.pdf") 
             fout = open("weblogo.eps","wb")
             fout.write(eps_formatter(data, format))
             fout.close()
