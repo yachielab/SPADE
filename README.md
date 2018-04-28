@@ -15,13 +15,13 @@ Installation
 -------------------------------
 1\. Obtain SPADE github packages using the following single command.
 
-```git clone https://github.com/ponnhide/SPADE```
+```git clone https://github.com/yachielab/SPADE```
 
 To execute SPADE using linux/unix commands, add the SPADE directory to \$PATH and add executable authority to the python scripts in the directory.
 
 ```cd SPADE```
 
-```chmod u+x \*.py```
+```chmod u+x *.py```
 
 2\. Install the necessary Python packages using the following commands. 
 

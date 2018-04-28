@@ -15,7 +15,7 @@ import genbank_viewer as gv
 from Bio import SeqIO
 from weblogolib import *
 import warnings
-warnings.filterwarnings('ignore')
+#warnings.filterwarnings('ignore')
 
 template = {'legend.numpoints': 1, 'axes.axisbelow': True, 'axes.labelcolor': '.15', 'ytick.major.width': 1.0, 'ytick.major.size': 4.0, 'axes.grid': False, 'ytick.minor.size': 0.0, 'legend.scatterpoints': 1, 'axes.edgecolor': "black", 'grid.color': 'white', 'legend.frameon': False, 'ytick.color': '.15', 'xtick.major.size': 4.0, 'xtick.major.width': 1.0, 'figure.facecolor': "#EAEAF2", 'xtick.color': '.15', 'xtick.minor.size': 3.0, 'xtick.direction': u'out', 'lines.solid_capstyle': u'round', 'grid.linestyle': u'-', 'image.cmap': u'Greys', 'axes.facecolor': "white", 'text.color': '.15', 'ytick.direction': u'out', 'axes.linewidth': 1.0}
 fonts = [font.split("/")[-1] for font in fm.findSystemFonts()]
@@ -200,7 +200,7 @@ def make_figure(peak_matrix_list, kmer_count_signal, repeat_unit_array, gap_repe
             axn3_xticklocs = axn3.xaxis.get_ticklocs()
             axn3.xaxis.set_ticks([]) 
             axn3.xaxis.set_ticklabels([]) 
-            axn3.tick_params(bottom="on",pad=6)        
+            axn3.tick_params(bottom=True,pad=6)        
             axn3.set_xlabel("Average\n Intensity (a.u.)",fontsize=22) 
             cbar_ax = fig.add_axes([0.120, start_y - 0.120  - i * 0.13, 0.10, 0.018])
             fig.colorbar(img, cax=cbar_ax, orientation="horizontal", ticks=[0, int(np.max(matrix))])
@@ -315,7 +315,11 @@ def motif_logo(dtype):
         options.yaxis_minor_tic_ratio = 2   
         format = LogoFormat(data, options)
         fout = open("weblogo.pdf","wb")
-        fout.write(pdf_formatter(data, format))
+        try:
+            fout.write(pdf_formatter(data, format))
+        except:
+            warnings.warn("Ghostscript was not found. If you want to generate LOGO in pdf format, please install Ghostscript.\n For the present, LOGO in EPS formated was output") 
+            fout.write(eps_formatter(data, format))
         fout.close()	
         try:
             fout = open("weblogo.txt","wb")
