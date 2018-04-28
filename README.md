@@ -35,10 +35,11 @@ If pip is not installed, please download [get-pip.py](https://bootstrap.pypa.io/
 
 ```pyhton get-pip.py```
 
-If you use default python in Mac and encounter the mesaage in the executioin of the command,
+If you use default python in Mac and encounter the mesaage in the executioin of ```python get-pip.py```,,
 
 ````
-
+matplotlib 1.3.1 requires nose, which is not installed.
+matplotlib 1.3.1 requires tornado, which is not installed.
 ````
 
 please use the follwoing commands instead of the above ones.
