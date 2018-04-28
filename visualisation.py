@@ -64,16 +64,14 @@ def make_figure(peak_matrix_list, kmer_count_signal, repeat_unit_array, gap_repe
     ax1 = plt.axes([0.2, 0.805, 0.55, 0.10])
     ax1.get_xaxis().set_major_formatter(matplotlib.ticker.FuncFormatter(lambda x, p: format(int(x), ',')))
     ax1.fill_between(pos_data,0,kmer_count_signal,facecolor="black")
-    ax1.set_xlim(0,len(pos_data))
     ax1.set_ylim(0,1.1 * max(kmer_count_signal))
     ax1.tick_params(axis='x', which='major')
     if start >= 0 and end >= 0:
         ticks = [i for i in range(int(math.floor(start/10.0) * 10.0),int(math.ceil(end/10.0) * 10.0),10)]
         hl    = len(kmer_count_signal) / 2.0
         space = round(hl * 1.0 / math.pow(10,int(math.log10(hl)))) * math.pow(10,int(math.log10(hl))) 
-        
         for tick in ticks:
-            if (tick-ticks[0]) * 1.0 / (2*hl) >= 0.20 and tick % math.pow(10,int(math.log10(hl))) == 0:
+            if (tick-ticks[0]) * 1.0 / (2*hl) >= 0.15 and tick % math.pow(10,int(math.log10(hl))) == 0:
                 if end > 1.0e+5:
                     tick_labels = [tick, tick + space]
                 else: 
@@ -83,7 +81,7 @@ def make_figure(peak_matrix_list, kmer_count_signal, repeat_unit_array, gap_repe
                     if tick+1.5*space > end:
                         tick_labels.remove(tick+1.5*space) 
                 break
-        
+         
         ax1.xaxis.set_ticks(list(map(lambda x: x-start, tick_labels)))
         ax1_xticklocs = ax1.xaxis.get_ticklocs()
         ax1.xaxis.set_ticklabels(list(map(lambda x: format(int(x), ',') if x != "" else "", tick_labels)), fontsize=22) 
@@ -107,7 +105,8 @@ def make_figure(peak_matrix_list, kmer_count_signal, repeat_unit_array, gap_repe
             GV.view_feature(ax_gv)
         elif dtype == "prot":
             box_num = 0
-         
+    ax1.set_xlim(0,len(pos_data))
+    
     start_y = 0.695 - 0.0160 * box_num 
     vmin = 0
     vmax = np.max(list(map(np.max,peak_matrix_list))) 
@@ -405,16 +404,18 @@ def load_data(dtype, strand, ksize ,thresh, Format="pdf"):
 
     for peak in peak_list: 
         for file_name in dir_list:
-            if "align.unit_seq.fasta" in file_name:
+            if "align.unit_seq.fasta" == file_name:
                 se_sets     = []
                 gap_se_sets = []
                 aln_se_sets = []
-                for line in open(file_name):
+                for line in open(file_name).readlines():
                     if line[0] == ">":
                         line = line.rstrip().split("_")
                         s = int(line[1]) 
+                        s = s if s > 0 else 0
                     else:
                         unit_length = len(line.rstrip()) 
+                        unit_length = peak if unit_length > peak else unit_length
                         seq = line.rstrip() 
                         e = s + unit_length 
                         for m, char in enumerate(seq):
@@ -435,7 +436,6 @@ def load_data(dtype, strand, ksize ,thresh, Format="pdf"):
                             gap_se_sets.append([s,s+m])
                 if n > 0:
                     gap_se_sets.append([e-n,e])
-
                 repeat_unit_array_x = []
                 repeat_unit_array_y = []
                 for start, end in se_sets:
