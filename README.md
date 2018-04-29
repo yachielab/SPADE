@@ -21,14 +21,18 @@ Installation
 
 To execute SPADE using linux/unix commands, add the SPADE directory to \$PATH and add executable authority to the python scripts in the directory.
 
-```cd SPADE```
-```chmod u+x *.py```
+````
+cd SPADE
+chmod u+x *.py
+````
 
 2\. Install the necessary Python packages using the following commands. 
 
-```pip install seaborn```
-```pip install weblogo```
-```pip install biopython```
+````
+pip install seaborn
+pip install weblogo
+pip install biopython
+````
 
 If pip is not installed, please download get-pip.py](https://bootstrap.pypa.io/get-pip.py) and install pip using the following command.
 
@@ -43,10 +47,12 @@ matplotlib 1.3.1 requires tornado, which is not installed.
 
 please use the following commands instead of the above ones,
 
-```pyhton get-pip.py --user```
-```pip install --user -I seaborn```
-```pip install --user -I weblogo```
-```pip install --user -I biopython```
+````
+pyhton get-pip.py --user
+pip install --user -I seaborn
+pip install --user -I weblogo
+pip install --user -I biopython
+````
 
 and set PYTHONPATH to /Users/[USER_NAME]/Library/Python/2.7/lib/python/site-packages
 
