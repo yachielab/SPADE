@@ -519,7 +519,7 @@ class HRA(object):
         new_peak_period_set   = []
         self.seed_kmer_list   = []
         self.max_r_list       = [] 
-        for period in self.peak_period_set:
+        for period in self.peak_period_set[:1]:
             if self.check_periodicity(period,0.2,self.hra_range[0]-self.hra_range[2],self.hra_range[1]-self.hra_range[2]): 
                 max_count  = 0
                 seed_kmer  = ""
@@ -577,19 +577,22 @@ class HRA(object):
         unit_seq_list = []
         for i,seed_pos in enumerate(seed_poss):
             r_num = seed_pos - max_r
-            if r_num < 0: 
-                gaps = ""
-                for j in range(abs(r_num)):
-                    gaps += "_"
-                unit_seq = gaps + self.region_seq[0:period-abs(r_num)]
+            if r_num < 0:
+                pass 
+            #    r_num = seed_pos
+            #    gaps = ""
+            #    for j in range(abs(r_num)):
+            #        gaps += "-"
+            #    unit_seq = gaps + self.region_seq[0:period-abs(r_num)]
             else:
                 if i < len(seed_poss) - 1 and (seed_poss[i+1] - seed_pos < 1.2 * period and seed_poss[i+1] - seed_pos > 0.8 * period):
                     unit_seq = self.region_seq[r_num:r_num + seed_poss[i+1] - seed_pos]
                 else:
                     unit_seq = self.region_seq[r_num:r_num + period]
-            
-            new_seed_poss.append(r_num)
-            unit_seq_list.append(unit_seq)
+        
+                new_seed_poss.append(r_num)
+                unit_seq_list.append(unit_seq)
+        
         self.max_r_list.append(max_r) 
         return unit_seq_list, new_seed_poss  
 
@@ -673,9 +676,9 @@ class HRA(object):
                 fasta_name =  "./" + self.output_dir + "/unit_seq.fasta"
             
             if self.dtype == "nucl":
-                mafft_coms.append("mafft {} --quiet {} > {}".format(self.option_mafft, fasta_name, fasta_name.replace("unit_seq.fasta","align.unit_seq.fasta"))) 
+                mafft_coms.append("mafft {} --quiet --auto {} > {}".format(self.option_mafft, fasta_name, fasta_name.replace("unit_seq.fasta","align.unit_seq.fasta"))) 
             else: 
-                mafft_coms.append("mafft {} --quiet --amino {} > {}".format(self.option_mafft, fasta_name, fasta_name.replace("unit_seq.fasta","align.unit_seq.fasta")))
+                mafft_coms.append("mafft {} --quiet --amino --auto {} > {}".format(self.option_mafft, fasta_name, fasta_name.replace("unit_seq.fasta","align.unit_seq.fasta")))
         self.mafft_com = "|".join(mafft_coms) 
         if Exec == 1:
             subprocess.call(self.mafft_com,shell=True)
@@ -688,7 +691,7 @@ class HRA(object):
             fasta_name = "align.unit_seq.fasta" 
             fasta = open(fasta_name)
             seqs  = read_seq_data(fasta)
-                        
+            fasta.close() 
             #Bit score calcuation using WebLogo package
             if self.dtype == "nucl":  	
                 seqs.alphabet = std_alphabets["dna"] 
@@ -762,8 +765,10 @@ class HRA(object):
     
     def make_se_sets(self):
         self.variable_query_list = []
+        self.repeat_num_list     = []
         for i,period in enumerate(self.peak_period_set[0:1]):
             self.variable_query_list.append(self.query_list[i])
+            self.repeat_num_list.append(len(self.se_sets_list[i]))
             if len(self.query_list[i]) > self.k_size:
                 fasta_name  = "align.unit_seq.fasta" 
                 blast_file  = open("./blast.txt")
@@ -855,13 +860,12 @@ class HRA(object):
                     #Cutting motif region from query sequence for blast
                     se_sets           = []
                     aligned_positions = [] 
-                    
+                    new_motifs        = [] 
                     for n, consensus_motif in enumerate(consensus_motifs):
                         ms = int(blast[n][11])-1-(int(blast[n][9])-1) + s
                         me = int(blast[n][12])+(len(self.query_list[i]) - int(blast[n][10])) - e
                         se_sets.append([ms, me])  
                         aligned_positions.append([(int(blast[n][9])-1)-s,me - ms - (len(self.query_list[i]) - int(blast[n][10])) + e])
-                        fasta.write(">motif_"+ str(ms) + "\n")
                         new_motif       = true_motifs[n][s:len(consensus_motif)-e]  
                         consensus_motif = consensus_motifs[n][s:len(consensus_motif)-e]  
                         if (int(blast[n][9])-1) - s <= 5:
@@ -869,14 +873,31 @@ class HRA(object):
                         else:
                             new_motif = consensus_motif[:(int(blast[n][9])-1)-s] + new_motif[(int(blast[n][9])-1)-s:]
                         
-                        if (len(self.query_list[i]) - int(blast[n][10]) - 1) - e <= 5:
+                        if (len(self.query_list[i]) - int(blast[n][10])) - e <= 5:
                             pass
                         else:
                             new_motif = new_motif[:e-(len(self.query_list[i]) - int(blast[n][10]) - 1)] + consensus_motif[e-(len(self.query_list[i]) - int(blast[n][10]) - 1):] 
-                        
-                        fasta.write(new_motif + "\n")
-                        true_motifs[n] = new_motif
-                    
+                        new_motifs.append(new_motif)
+
+                    flag = 0 
+                    true_motifs = [] 
+                    combi = list(zip(se_sets,new_motifs)) 
+                    combi.sort(key=lambda x:x[0][0]) 
+                    se_sets, new_motifs = list(zip(*combi))
+                    se_sets = [list(se_set) for se_set in se_sets] 
+                    for n, se_set in enumerate(se_sets):
+                        if flag == 1:
+                            pass 
+                        else:
+                            fasta.write(">motif_"+ str(se_set[0]) + "\n")
+                            fasta.write(new_motifs[n] + "\n")
+                            true_motifs.append(new_motifs[n])
+                            start = se_set[0] 
+                        if n < len(se_sets)-1 and start + len(new_motifs[n]) - new_motifs[n].count("-") > se_sets[n+1][0]:
+                            flag = 1
+                        else:
+                            flag = 0 
+
                     #Save repeat motif and search the varible position in the repeat motif.
                     true_query = ""
                     variable_query = "" 
@@ -901,6 +922,7 @@ class HRA(object):
                     self.aligned_positions_list[i] = aligned_positions
 
 
+                    self.repeat_num_list[i]        = len(true_motifs)
                 blast_file.close()
     
     def blast(self, Exec=0):
@@ -930,7 +952,6 @@ class HRA(object):
         
     def make_motif_array(self):
         self.range_list         = []
-        self.repeat_num_list    = []
         self.repeat_type_list   = [] 
         self.periodicity_list   = [] 
         new_aligned_positions_list = [] 
@@ -938,6 +959,7 @@ class HRA(object):
         new_query_list             = []
         new_variable_query_list    = [] 
         new_se_sets_list           = [] 
+        new_repeat_num_list        = [] 
         for i,period in enumerate(self.peak_period_set[:1]):
             self.se_sets_list[i].sort()
             p_min = period - max(int(round(0.2*period)),5) if period - max(int(round(0.2*period)),5) > 0 else 0
@@ -1003,7 +1025,7 @@ class HRA(object):
                 new_variable_query_list.append(self.variable_query_list[i])
                 new_se_sets_list.append(se_sets)  
                 new_aligned_positions_list.append(self.aligned_positions_list[i]) 
-                
+                new_repeat_num_list.append(self.repeat_num_list[i])   
                 if self.dtype == "nucl":
                     self.range_list.append([self.hra_range[2] + se_sets[0][0], self.hra_range[2] + se_sets[-1][1]])
                 else:
@@ -1011,20 +1033,29 @@ class HRA(object):
 
                 self.periodicity_list.append(periodicity) 
                 self.repeat_type_list.append(repeat_type)
-                self.repeat_num_list.append(len(se_sets))
         
         self.peak_period_set        = new_peak_period_set
         self.query_list             = new_query_list
         self.variable_query_list    = new_variable_query_list
         self.se_sets_list           = new_se_sets_list
         self.aligned_positions_list = new_aligned_positions_list 
-
+        self.repeat_num_list        = new_repeat_num_list
+    
     def make_feature(self, make_gb=True, make_tsv=True):
         new_feat_list = []
-        for i, period, se_sets in zip([0],self.peak_period_set,self.se_sets_list):
+        for i, period in zip([0],self.peak_period_set):
             #Present version of SPADE don't care abount the position of blast hits.
             #If repeating motifs are separated by space whose length is times longer than periodd, the repeat would be evaluated as 
             #two different repeats at next version of spade.
+            se_sets = [] 
+            for line in open("align.unit_seq.fasta"):
+                if line[0] == ">":
+                    s = int(line.rstrip().split("_")[-1]) 
+                else:
+                    e = s + len(line.rstrip()) 
+                    e = s + period if e-s > period else e
+                    se_sets.append([s,e]) 
+            
             if se_sets[0][0] < 0: 
                 se_sets[0][0] = 0 
             
@@ -1071,7 +1102,7 @@ class HRA(object):
             new_feat.qualifiers["sequence_type"][0] = self.dtype
             new_feat.qualifiers["period"].append(str(period)) 
             new_feat.qualifiers["rpt_type"].append(self.repeat_type_list[i])
-            new_feat.qualifiers["rpt_num"].append(str(len(se_sets))) 
+            new_feat.qualifiers["rpt_num"].append(str(self.repeat_num_list[i])) 
             new_feat.qualifiers["periodicity_score"].append(str(self.periodicity_list[i]))
             new_feat.qualifiers["rpt_unit_seq"].append(str(self.variable_query_list[i]))
             new_feat.qualifiers["unmasked_rpt_unit_seq"].append(str(self.query_list[i]))
@@ -1126,7 +1157,7 @@ class HRA(object):
         vs.motif_logo(self.dtype) 
         
     def make_figure(self):
-        vs.load_data(self.dtype, self.strand  ,self.k_size, 10) 
+        vs.load_data(self.dtype, 1, self.k_size, 10) 
     
     def save_region_record(self):
         pass 

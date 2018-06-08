@@ -11,30 +11,50 @@ Software Dependencies
 -------------------------------
 SPADE works under Python 2.7.13 or Python 3.6.1 later and require BLAST+ (ver 2.6.0 later) and MAFFT (ver 7.221 later) to be installed.
 
+\*If you use default Python in OSX or macOS, I will recommend to use Homebrew's Python.
+
 Installation
 -------------------------------
 1\. Obtain SPADE github packages using the following single command.
 
-```git clone https://github.com/ponnhide/SPADE```
+```git clone https://github.com/yachielab/SPADE```
 
 To execute SPADE using linux/unix commands, add the SPADE directory to \$PATH and add executable authority to the python scripts in the directory.
 
-```cd SPADE```
-
-```chmod u+x \*.py```
+````
+cd SPADE
+chmod u+x *.py
+````
 
 2\. Install the necessary Python packages using the following commands. 
 
-```pip install seaborn```
+````
+pip install seaborn
+pip install weblogo
+pip install biopython
+````
 
-```pip install weblogo```
+If pip is not installed, please download get-pip.py](https://bootstrap.pypa.io/get-pip.py) and install pip using the following command.
 
-```pip install biopython```
+```python get-pip.py```
 
-If pip is not installed, please download [get-pip.py](https://bootstrap.pypa.io/get-pip.py). Then, pip will be avaiable by the following commands. After that, please retry the above commands.
+\*If you use default Python in OSX or macOS and encounter the following message when get-pip.py is executed,
 
-```pyhton get-pip.py```
+````
+matplotlib 1.3.1 requires nose, which is not installed.
+matplotlib 1.3.1 requires tornado, which is not installed.
+````
 
+please use the following commands instead of the above ones,
+
+````
+pyhton get-pip.py --user
+pip install --user -I seaborn
+pip install --user -I weblogo
+pip install --user -I biopython
+````
+
+and set PYTHONPATH to /Users/[USER_NAME]/Library/Python/2.7/lib/python/site-packages
 
 3\. Install MAFFT if it is not installed. MAFFT package is available at the following links.
 
