@@ -189,4 +189,4 @@ if __name__ == "__main__":
         score_matrix, score_array, hoge= kmer_count_matrix(str(record.seq),10,1000,seqtype="DNA") 
         score_array = score_array.tolist()
         ouput_data = zip(range(len(score_array)),score_array) 
-        np.savetxt(sys.argv[1].split(".") + "_{}_".format(record.id) + ".txt", np.array(ouput_data), delimiter="\t", fmt="%.0f")
+        np.savetxt("{}_".format(record.id) + ".txt", np.array(ouput_data), delimiter="\t", fmt="%.0f")
