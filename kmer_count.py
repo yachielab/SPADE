@@ -186,7 +186,12 @@ def find_candidates(score_list, thresh = 5.0, gap = 200, buf = 1000, min_score=0
 if __name__ == "__main__":
     record_parse = SeqIO.parse(sys.argv[1],sys.argv[2])
     for record in record_parse:
-        score_matrix, score_array, hoge= kmer_count_matrix(str(record.seq),10,1000,seqtype="DNA") 
+        score_array, HRRs = kmer_count(str(record.seq),10,1000,seqtype="DNA") 
         score_array = score_array.tolist()
-        ouput_data = zip(range(len(score_array)),score_array) 
-        np.savetxt("{}_".format(record.id) + ".txt", np.array(ouput_data), delimiter="\t", fmt="%.0f")
+        ouput_data  = zip(range(len(score_array)),score_array)
+        np.savetxt("{}_scores".format(record.id) + ".txt", np.array(ouput_data), delimiter="\t", fmt="%.0f")
+        with open("{}_HRRs".format(record.id) + ".txt","w") as o:
+            for hrr in HRRs:
+                o.write(",".join(list(map(str,hrr))) + "\n") 
+
+        
