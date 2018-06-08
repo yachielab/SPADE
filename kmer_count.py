@@ -184,21 +184,9 @@ def find_candidates(score_list, thresh = 5.0, gap = 200, buf = 1000, min_score=0
     return candidate_list
 
 if __name__ == "__main__":
-    import matplotlib
-    matplotlib.use("Agg")
-    import matplotlib.pyplot as plt
-    import seaborn as sns 
-    template = {'legend.numpoints': 1, 'axes.axisbelow': True, 'axes.labelcolor': '.15', 'ytick.major.width': 0.5, 'ytick.major.size': 4.0, 'axes.grid': False, 'ytick.minor.size': 0.0, 'legend.scatterpoints': 1, 'axes.edgecolor': "black", 'grid.color': 'white', 'legend.frameon': False, 'ytick.color': '.15', 'xtick.major.size': 4.0, 'xtick.major.width': 0.5, 'figure.facecolor': "#EAEAF2", 'xtick.color': '.15', 'xtick.minor.size': 3.0, 'xtick.direction': u'out', 'lines.solid_capstyle': u'round', 'grid.linestyle': u'-', 'image.cmap': u'Greys', 'axes.facecolor': "white", 'text.color': '.15', 'ytick.direction': u'out', 'axes.linewidth': 0.5}
-    sns.set(font = "Helvetica")
-    sns.set_context("poster", font_scale=1.4, rc={"lines.linewidth": 1.0}) 
-    sns.set_style(template)
-    record_parse = SeqIO.parse(sys.argv[1],"fasta")
+    record_parse = SeqIO.parse(sys.argv[1],sys.argv[2])
     for record in record_parse:
         score_matrix, score_array, hoge= kmer_count_matrix(str(record.seq),10,1000,seqtype="DNA") 
-        break
-    plt.fill_between(range(len(score_array)),0,score_array,facecolor="black")
-    plt.savefig("test.pdf")
-    plt.show()
-    score_array = score_array.tolist()
-    ouput_data = zip(range(len(score_array)),score_array) 
-    np.savetxt(sys.argv[1].split(".")[0] + ".txt", np.array(ouput_data), delimiter="\t", fmt="%.0f")
+        score_array = score_array.tolist()
+        ouput_data = zip(range(len(score_array)),score_array) 
+        np.savetxt(sys.argv[1].split(".") + "_{}_".format(record.id) + ".txt", np.array(ouput_data), delimiter="\t", fmt="%.0f")
