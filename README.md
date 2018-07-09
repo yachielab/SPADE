@@ -11,7 +11,6 @@ Software Dependencies
 -------------------------------
 SPADE works under Python 2.7.13 or Python 3.6.1 later and require BLAST+ (ver 2.6.0 later) and MAFFT (ver 7.221 later) to be installed.
 
-\*If you use default Python in OSX or macOS, I will recommend to use Homebrew's Python.
 
 Installation
 -------------------------------
