@@ -44,7 +44,7 @@ matplotlib 1.3.1 requires nose, which is not installed.
 matplotlib 1.3.1 requires tornado, which is not installed.
 ````
 
-please use the following commands instead of the above ones,
+please use the following commands,
 
 ````
 pyhton get-pip.py --user
