@@ -154,7 +154,7 @@ class LOCUS(object):
         self.option_blastp = option_blastp
         self.format_type   = format_type
         self.process       = "None"
-        self.seqtype       = "nucl"
+        self.seqtype       = None
         self.visualisation = visualisation
         self.delete        = delete
 
@@ -173,7 +173,6 @@ class LOCUS(object):
             self.tm      = self.ptm
             self.tq      = self.ptq
             self.tr      = self.ptr
-        #print self.seqtype
     
     def cumulative_kmer_count(self): 
         self.score_array, self.hra_range_list = kmer_count(self.seq, self.k_size, self.w_size, thresh=self.tk, gap=self.g_size, buf=self.tm, seqtype=self.seqtype)
@@ -626,10 +625,10 @@ class HRA(object):
         #3        score  
         #####
 
-        f = "ppm.tsv"
-        header = "\tPositoin\nPeriod\t"
-        header += "\t".join(list(map(str,list(range(1,self.period_matrix.shape[1]+1))))) + "\n"
-        savetxt(f, np.concatenate((np.array([list(range(1,self.period_matrix.shape[0]+1))]).T, self.period_matrix.astype(np.int)), axis=1), delimiter="\t", fmt=":.0f", header=header)
+        #f = "ppm.tsv"
+        #header = "\tPositoin\nPeriod\t"
+        #header += "\t".join(list(map(str,list(range(1,self.period_matrix.shape[1]+1))))) + "\n"
+        #savetxt(f, np.concatenate((np.array([list(range(1,self.period_matrix.shape[0]+1))]).T, self.period_matrix.astype(np.int)), axis=1), delimiter="\t", fmt=":.0f", header=header)
         #####
         #        Position
         #Pediod     1       2       3       4       5       6   
