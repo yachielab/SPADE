@@ -145,7 +145,7 @@ class GENOME(object):
         return gene_nums
 
     def plot_data(self, key, data, x_data=None, bottom=360, log=False, height=150, xaxes=False, yaxes=False, plot_style="normal", 
-            circular=False, lw=0.5, color="k", color1="#D62728", color2="#1F77B4", cmap=plt.cm.Reds):
+            circular=False, lw=0.5, color="k", color1="#D62728", color2="#1F77B4", cmap=plt.cm.Reds, max_value=1):
         #data is composed of # of locus data. It is like [[~],[~]] 
         data = np.array(data)
         if log == True:
@@ -153,7 +153,7 @@ class GENOME(object):
                 data = np.log10(data+1)
             else:
                 data = np.log10(data)
-        data = data * height / max([0,(np.max(np.abs(data)) - 0)])
+        data = data * height / max([max_value,(np.max(np.abs(data)) - 0)])
         theta = self.theta[self.locus_dict[key]["start"]:self.locus_dict[key]["end"]]
 
         if len(data) != len(theta):

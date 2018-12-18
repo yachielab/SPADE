@@ -72,8 +72,8 @@ if __name__ == "__main__":
 
     for key in chuncos.locus_dict.keys():
         chuncos.plot_data(key, np.array(kmer_count), bottom=450, height=250, xaxes=False, yaxes=False, plot_style="fill", color1="#CCCCCC")
-        chuncos.plot_data(key, np.array(dna_periodicity), bottom=450, height=250, xaxes=False, yaxes=False, plot_style="fill", color1="#531096")
-        chuncos.plot_data(key, np.array(protein_periodicity), bottom=450, height=250, xaxes=False, yaxes=False, plot_style="fill", color1="#ff9300")
+        chuncos.plot_data(key, np.array(dna_periodicity), bottom=450, height=250, xaxes=False, yaxes=False, plot_style="fill", color1="#531096", max_value=max(kmer_count))
+        chuncos.plot_data(key, np.array(protein_periodicity), bottom=450, height=250, xaxes=False, yaxes=False, plot_style="fill", color1="#ff9300", max_value=max(kmer_count))
 
         #For CRISPR
         chuncos.plot_feature(feat_type="repeat_region", bottom=350, height=100, requirement=lambda x:("rpt_family" in x.qualifiers.keys() and "CRISPR" in x.qualifiers["rpt_family"][0]), color="#531096", expand=3, scatter=True)
