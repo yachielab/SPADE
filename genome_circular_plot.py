@@ -62,7 +62,10 @@ if __name__ == "__main__":
         seq_type    = repeat[2] 
         if seq_type == "prot":
             for i in range(start,end): 
-                protein_periodicity[i] = kmer_count[i]    
+                if kmer_count[i] > 0:
+                    protein_periodicity[i] = kmer_count[i]  
+                else:
+                    protein_periodicity[i] = 1
         else:
             for i in range(start,end): 
                 dna_periodicity[i] = kmer_count[i]

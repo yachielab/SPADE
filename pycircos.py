@@ -86,14 +86,14 @@ class GENOME(object):
             for feat in locus_info["features"]:
                 feat_set.add(feat.type)
                 if feat_type == feat.type and requirement(feat):
-                    start = locus_info["start"] + feat.location.start
-                    end   = locus_info["start"] + feat.location.end
-                    pos   = (start + end) * np.pi / self.sum_length
-                    if scatter == False:
-                        self.ax.bar([pos,pos], [0,height], align="center", bottom=bottom, width=expand*2.0*np.pi*(end-start)/self.sum_length, color=color, linewidth=0) 
-                    elif scatter == True:
-                        self.ax.scatter(pos,bottom+(height/2.0),s=10,color=color,zorder=10)
-
+                    for part in feat.location.parts:
+                        start = locus_info["start"] + part.start
+                        end   = locus_info["start"] + part.end
+                        pos   = (start + end) * np.pi / self.sum_length
+                        if scatter == False:
+                            self.ax.bar([pos,pos], [0,height], align="center", bottom=bottom, width=expand*2.0*np.pi*(end-start)/self.sum_length, color=color, linewidth=0) 
+                        elif scatter == True:
+                            self.ax.scatter(pos,bottom+(height/2.0),s=10,color=color,zorder=10)
 
     def calc_gcamount(self, key, window_size=100000, slide_size=100000):
         seq = self.locus_dict[key]["seq"]
@@ -153,7 +153,7 @@ class GENOME(object):
                 data = np.log10(data+1)
             else:
                 data = np.log10(data)
-        data = data * height / (np.max(np.abs(data)) - 0) 
+        data = data * height / max([0,(np.max(np.abs(data)) - 0)])
         theta = self.theta[self.locus_dict[key]["start"]:self.locus_dict[key]["end"]]
 
         if len(data) != len(theta):
