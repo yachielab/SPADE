@@ -101,8 +101,11 @@ def make_figure(peak_matrix_list, kmer_count_signal, repeat_unit_array, gap_repe
         GV = gv.GenbView(gb,fig)
         if dtype == "nucl":
             box_num = GV.make_parameter_list(0,len(kmer_count_signal))
-            ax_gv = plt.axes([0.2,0.72-0.0175*(box_num-1),0.55,0.0175*box_num])
-            GV.view_feature(ax_gv)
+            if box_num == 0:
+                pass 
+            else:
+                ax_gv = plt.axes([0.2,0.72-0.0175*(box_num-1),0.55,0.0175*box_num])
+                GV.view_feature(ax_gv)
         elif dtype == "prot":
             box_num = 0
     ax1.set_xlim(0,len(pos_data))
