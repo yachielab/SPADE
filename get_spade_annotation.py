@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import sys 
+import codecs
 from Bio import SeqIO
 
 def get_spade_annotations(dir_name = ""):
@@ -9,7 +10,7 @@ def get_spade_annotations(dir_name = ""):
     periodic_repeats = [] 
     spade_gbk_list = [f for f in dirs if "SPADE" in f]  
     for gbk in spade_gbk_list:
-        for record in list(SeqIO.parse(gbk,"genbank")):
+        for record in list(SeqIO.parse(codecs.open(gbk, 'r', 'utf-8', 'ignore'),"genbank")):
             gbk_id   = record.id
             CDS_list = []  
             for feature in record.features:
