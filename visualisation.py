@@ -19,10 +19,14 @@ import warnings
 
 template = {'legend.numpoints': 1, 'axes.axisbelow': True, 'axes.labelcolor': '.15', 'ytick.major.width': 1.0, 'ytick.major.size': 4.0, 'axes.grid': False, 'ytick.minor.size': 0.0, 'legend.scatterpoints': 1, 'axes.edgecolor': "black", 'grid.color': 'white', 'legend.frameon': False, 'ytick.color': '.15', 'xtick.major.size': 4.0, 'xtick.major.width': 1.0, 'figure.facecolor': "#EAEAF2", 'xtick.color': '.15', 'xtick.minor.size': 3.0, 'xtick.direction': u'out', 'lines.solid_capstyle': u'round', 'grid.linestyle': u'-', 'image.cmap': u'Greys', 'axes.facecolor': "white", 'text.color': '.15', 'ytick.direction': u'out', 'axes.linewidth': 1.0}
 fonts = [font.split("/")[-1] for font in fm.findSystemFonts()]
+
 if "Helvetica.ttf" in fonts:
     sns.set(font = "Helvetica")
 else:
-    sns.set(font = "Arial")
+    try:
+        sns.set(font = "Arial")
+    except:
+        pass
 
 sns.set_context("poster", font_scale=1.4, rc={"lines.linewidth": 1.0}) 
 sns.set_style(template)
