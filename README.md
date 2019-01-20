@@ -9,7 +9,7 @@ SPADE is a software to explore various periodic repeat regions comprehensively f
 
 Software Dependencies
 -------------------------------
-SPADE works under Python 2.7.13 or Python 3.6.1 later and require BLAST+ (ver 2.6.0 later) and MAFFT (ver 7.221 later) to be installed.
+SPADE works under Python 2.7.13 or Python 3.6.1 and require BLAST+ (ver 2.6.0 later) and MAFFT (ver 7.221 later) to be installed.
 
 
 Installation
@@ -28,7 +28,8 @@ chmod u+x *.py
 2\. Install the necessary Python packages using the following commands. 
 
 ````
-pip install seaborn
+pip install matplotlib==2.2.3
+pip install seaborn==0.8.1
 pip install weblogo
 pip install biopython
 ````
