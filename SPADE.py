@@ -125,7 +125,7 @@ class SPADE(object):
 
 class LOCUS(object):
     #Nm, Nr,  Nq
-    def __init__(self, seq, record, k_size, w_size, g_size, tk, tp, tb, tm, tr, tq, pk_size, pw_size, pg_size, ptk, ptp, ptb, ptm, ptr, ptq, visualisation, delete, option_mafft, option_blastn, option_blastp, format_type):
+    def __init__(self, seq, record, sqt, k_size, w_size, g_size, tk, tp, tb, tm, tr, tq, pk_size, pw_size, pg_size, ptk, ptp, ptb, ptm, ptr, ptq, visualisation, delete, option_mafft, option_blastn, option_blastp, format_type):
         self.HRA_list      = []
         self.Id            = record.id 
         self.seq           = seq
@@ -154,11 +154,11 @@ class LOCUS(object):
         self.option_blastp = option_blastp
         self.format_type   = format_type
         self.process       = "None"
-        self.seqtype       = None
+        self.seqtype       = sqt
         self.visualisation = visualisation
         self.delete        = delete
 
-        head_seq         = str(self.seq)[0:10000]
+        head_seq         = str(self.seq)[0:10000].upper() 
         ratio = (head_seq.count("A") + head_seq.count("T") + head_seq.count("G") + head_seq.count("C") + head_seq.count("N")) * 1.0 / len(head_seq)
         if ratio > 0.9 or self.seqtype == "nucl":
             self.seqtype = "nucl"
@@ -1208,7 +1208,7 @@ if __name__ == "__main__":
     if args.delete:
         args.delete = 1 
  
-    spade.run(args.num_threads,[args.Nk, args.Nw, args.Ng, args.Ns, args.Np, args.Nu, args.Nm, args.Nr, args.Nq, args.Pk, args.Pw, args.Pg, args.Ps, args.Pp, args.Pu, args.Pm, args.Pr, args.Pq, args.v, args.delete, args.mafft, args.blastn, args.blastp])
+    spade.run(args.num_threads,[args.t, args.Nk, args.Nw, args.Ng, args.Ns, args.Np, args.Nu, args.Nm, args.Nr, args.Nq, args.Pk, args.Pw, args.Pg, args.Ps, args.Pp, args.Pu, args.Pm, args.Pr, args.Pq, args.v, args.delete, args.mafft, args.blastn, args.blastp])
     finish = open("finish.txt","w")
     finish.write("fnish")
     finish.close() 
