@@ -30,7 +30,7 @@ chmod u+x *.py
 ````
 pip install matplotlib==2.2.3
 pip install seaborn==0.8.1
-pip install weblogo
+pip install weblogo==3.6.0
 pip install biopython
 ````
 
