@@ -1174,7 +1174,6 @@ if __name__ == "__main__":
     p.add_argument("--mafft", type=str, default="--auto") 
     p.add_argument("--blastn", type=str, default='-strand plus -task blastn-short -penalty -2 -outfmt "6 qseqid qseq sseqid sseq pident qlen length mismatch gapopen qstart qend sstart send gaps evalue bitscore"') 
     p.add_argument("--blastp", type=str, default='-task blastp-short -outfmt "6 qseqid qseq sseqid sseq pident qlen length mismatch gapopen qstart qend sstart send gaps evalue bitscore"')
-
     p.add_argument("-n", "--num_threads", type=int, default=1) 
     p.add_argument("-v", type=str, default="Y", choices=("Y","N"))
     p.add_argument("-d", "--delete", action="store_true", default=False)
