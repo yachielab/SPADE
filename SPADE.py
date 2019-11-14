@@ -472,7 +472,7 @@ class HRA(object):
 
     def kmer_period_matrix(self):
         self.period_matrix, self.region_score_array, self.kmer_position_dict  = kmer_count_matrix(self.region_seq, self.k_size, self.w_size, seqtype=self.dtype)
- 
+         
     def search_peek(self):
         for kmer in self.kmer_position_dict:
             if len(self.kmer_position_dict[kmer][1]) > 1 and kmer != "":
@@ -496,7 +496,6 @@ class HRA(object):
             maxIds = [Id for Id in maxIds if Id > maxId and Id % maxId == 0] 
             maxIds = [maxId] + maxIds 
         self.peak_period_set = maxIds
-
         #sorting with first postion of each k-mer set
         self.sorted_kmer_list = list(self.kmer_period_dict.keys()) 
         self.sorted_kmer_list.sort(key=lambda x: self.kmer_position_dict[x][1][0]) 
@@ -517,7 +516,7 @@ class HRA(object):
         self.unit_seq_list    = [] 
         new_peak_period_set   = []
         self.seed_kmer_list   = []
-        self.max_r_list       = [] 
+        self.max_r_list       = []
         for period in self.peak_period_set[:1]:
             if self.check_periodicity(period,0.2,self.hra_range[0]-self.hra_range[2],self.hra_range[1]-self.hra_range[2]): 
                 max_count  = 0
@@ -551,7 +550,7 @@ class HRA(object):
                 else:
                     self.periodicity = False 
         self.peak_period_set = new_peak_period_set
-    
+        
     def get_unit_seq_list(self, seed_poss, period):
         #Extraction of repeat unit sequence candidates based on Position-Periodicity Matrix
         r_list = []
@@ -1210,5 +1209,5 @@ if __name__ == "__main__":
  
     spade.run(args.num_threads,[args.t, args.Nk, args.Nw, args.Ng, args.Ns, args.Np, args.Nu, args.Nm, args.Nr, args.Nq, args.Pk, args.Pw, args.Pg, args.Ps, args.Pp, args.Pu, args.Pm, args.Pr, args.Pq, args.v, args.delete, args.mafft, args.blastn, args.blastp])
     finish = open("finish.txt","w")
-    finish.write("fnish")
+    finish.write("finish")
     finish.close() 
