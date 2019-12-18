@@ -383,7 +383,7 @@ class LOCUS(object):
             if self.format_type == "genbank":
                 record_handle = open(self.record.id + "_SPADE.gb", "w") 
                 SeqIO.write(self.record, record_handle, "genbank")
-            
+                record_handle.close()
             if self.format_type == "fasta":
                 record_handle = open(self.record.id + "_SPADE.gb", "w") 
                 new_record    = SeqRecord(Seq(str(self.record.seq),Alphabet.DNAAlphabet()))
@@ -392,7 +392,7 @@ class LOCUS(object):
                 self.record.features.extend(spade_list)
                 self.record.features.sort(key=lambda x: x.location.start)
                 SeqIO.write(self.record, record_handle, "genbank")
-            record_handle.close()
+                record_handle.close()
         if self.delete == 1: 
             for apath in rm_dir_list:
                 print(apath) 
@@ -1073,7 +1073,11 @@ class HRA(object):
 
             locations = []  
             for part in part_list_all:
-                locations.append(FeatureLocation(part[0], part[-1]))  
+                try:
+                    locations.append(FeatureLocation(part[0], part[-1]))  
+                except:
+                    pass 
+
             location = CompoundLocation(locations) 
             new_feat = SeqFeature(location , type="repeat_region", qualifiers={"dir_name":["",],"note":["",],"hrr_range":["",],"sequence_type":["",],"period":[], "rpt_type":[], "rpt_num":[], "periodicity_score":[], "rpt_unit_seq":[],"unmasked_rpt_unit_seq":[]})                
             new_feat.qualifiers["dir_name"][0]      = self.output_dir
@@ -1089,7 +1093,10 @@ class HRA(object):
 
             locations = []  
             for part in part_list:
-                locations.append(FeatureLocation(part[0], part[-1])) 
+                try:
+                    locations.append(FeatureLocation(part[0], part[-1])) 
+                except:
+                    pass 
             location = CompoundLocation(locations) 
             new_feat_part            = SeqFeature(location , type="repeat_region")
             new_feat_part.qualifiers = new_feat.qualifiers 
