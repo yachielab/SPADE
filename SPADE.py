@@ -777,7 +777,7 @@ class HRA(object):
                 if len(blast) > 2:
                     #If ovelap region between blast hits was detected, the hit represent less E-value compared to others were selected. 
                     fasta = open(fasta_name,"w")
-                    blast = [elements for elements in blast if float(elements[-2]) <= 0.1 or float(elements[6])/float(elements[5]) >= 0.5]
+                    blast = [elements for elements in blast if float(elements[-2]) <= 0.001 or float(elements[6])/float(elements[5]) >= 0.5]
                     consensus_motifs = []
                     true_motifs = [] 
                     pre_end = 0 
@@ -896,7 +896,6 @@ class HRA(object):
                                 variable_query += "*"
                             else: 
                                 variable_query += char
-                    
                     fasta.close()
                     self.query_list[i]             = true_query
                     self.variable_query_list[i]    = variable_query
@@ -1035,7 +1034,6 @@ class HRA(object):
                     e = s + len(line.rstrip()) 
                     e = s + period if e-s > period else e
                     se_sets.append([s,e]) 
-            
             if se_sets[0][0] < 0: 
                 se_sets[0][0] = 0 
             
