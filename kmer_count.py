@@ -26,7 +26,7 @@ def update_pp(seq,kmer_dict,pre_kmer,new_kmer,k,window_size,pos):
     kmer_dict[new_kmer][0] += 1
     kmer_dict[new_kmer][1].append(pos)
 
-def kmer_count(seq, mer_size, window_size, thresh=5.0, gap=200, buf=1000, min_score=0, seqtype="DNA"):
+def kmer_count(seq, mer_size, window_size, thresh=5.0, gap=200, buf=1000, min_score=0, seqtype="nucl"):
     kmer_dict = make_kmer_set(seq[1:],window_size,mer_size,0) 
     score_array = np.zeros(len(seq)) 
     query = seq[0:mer_size]
@@ -36,7 +36,7 @@ def kmer_count(seq, mer_size, window_size, thresh=5.0, gap=200, buf=1000, min_sc
     flag  = 0 
     candidate_list = []
     for i in range(len(seq)-mer_size): 
-        if query not in kmer_dict or ((query.count("N") == len(query) or query.count("n") == len(query)) and seqtype == "DNA"):
+        if query not in kmer_dict or ((query.count("N") == len(query) or query.count("n") == len(query)) and seqtype == "nucl"):
             pass
         else: 
             n = 0
