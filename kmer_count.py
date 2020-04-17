@@ -90,7 +90,7 @@ def kmer_count(seq, mer_size, window_size, thresh=5.0, gap=200, buf=1000, min_sc
     return score_array, candidate_list
 
 
-def kmer_count_matrix(seq, mer_size, window_size, max_window_size=5000, seqtype="DNA"):
+def kmer_count_matrix(seq, mer_size, window_size, max_window_size=5000, seqtype="nucl"):
     kmer_dict = make_kmer_set(seq,window_size,mer_size,0) 
     if window_size > max_window_size:
         limit_window_size = max_window_size
@@ -105,7 +105,7 @@ def kmer_count_matrix(seq, mer_size, window_size, max_window_size=5000, seqtype=
     score_array  = np.zeros(len(seq)) 
     query = seq[0:mer_size]
     for i in range(len(seq)-mer_size): 
-        if query not in kmer_dict or ((query.count("N") == len(query) or query.count("n") == len(query)) and seqtype == "DNA"):
+        if query not in kmer_dict or ((query.count("N") == len(query) or query.count("n") == len(query)) and seqtype == "nucl"):
             pass
         else: 
             n = 0
@@ -186,7 +186,7 @@ def find_candidates(score_list, thresh = 5.0, gap = 200, buf = 1000, min_score=0
 if __name__ == "__main__":
     record_parse = SeqIO.parse(sys.argv[1],sys.argv[2])
     for record in record_parse:
-        score_array, HRRs = kmer_count(str(record.seq),10,1000,seqtype="DNA") 
+        score_array, HRRs = kmer_count(str(record.seq),10,1000,seqtype="nucl") 
         score_array = score_array.tolist()
         ouput_data  = zip(range(len(score_array)),score_array)
         np.savetxt("{}_scores".format(record.id) + ".txt", np.array(ouput_data), delimiter="\t", fmt="%.0f")
